@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "539644057362",
+    "project_id": "betahadarm",
+    "storage_bucket": "betahadarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539644057362:android:ed6b80c7f193d6624cc5cb",
+        "android_client_info": {
+          "package_name": "com.example.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539644057362-gd0kmdb7jqntmvb9umk3121hot6o8k50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv2vd07G2PaxECP26uMCsVZwjVvSw-mQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539644057362-gd0kmdb7jqntmvb9umk3121hot6o8k50.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

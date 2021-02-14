@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".Login" >
+
+
+
+<Space
+android:layout_width="0dp"
+android:layout_height="match_parent"
+android:layout_weight="1" />
+
+<LinearLayout
+android:layout_width="0dp"
+android:layout_height="match_parent"
+android:layout_weight="4"
+android:orientation="vertical">
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.5" />
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:autoSizeTextType="uniform"
+    android:gravity="center"
+    android:text="Register"
+    android:textStyle="bold" />
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+<EditText
+    android:id="@+id/name"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:ems="10"
+    android:hint="name"
+    android:inputType="textPersonName" />
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.5" />
+
+<EditText
+    android:id="@+id/phone"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:ems="10"
+    android:hint="phone"
+    android:inputType="phone" />
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.5" />
+
+<EditText
+    android:id="@+id/business"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:ems="10"
+    android:hint="business name"
+    android:inputType="textPersonName|text" />
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.5" />
+
+<EditText
+    android:id="@+id/des"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:ems="10"
+    android:hint="description"
+    android:inputType="textPersonName|text" />
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.5" />
+
+<EditText
+    android:id="@+id/Email"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:ems="10"
+    android:hint="Email"
+    android:inputType="textEmailAddress" />
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="0.5" />
+
+<EditText
+    android:id="@+id/pass"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:ems="10"
+    android:hint="password"
+    android:inputType="textPassword" />
+
+<TextView
+    android:id="@+id/tVregister"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="horizontal">
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:onClick="reg"
+        android:text="register" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="log in" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+</LinearLayout>
+
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1.5" />
+</LinearLayout>
+
+<Space
+android:layout_width="0dp"
+android:layout_height="match_parent"
+android:layout_weight="1" />
+
+    </LinearLayout>
