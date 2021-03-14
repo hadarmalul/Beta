@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView tvBTitle, tvBRegister;
-    String name = "", uid = "", mail = "", pass = "";
-    EditText etBmail, etBpass;
+    String nameU = "", uidU = "", mailU = "", passU = "";
+    EditText etBmail, etBpass, etname;
     // private FirebaseAuth mAuth;
     Boolean stayConnect, registered; //isUID=false,mVerificationProgress=false;
     Button btnB;
-    Userr userBdb;
+    UserC userBdb;
     CheckBox cBstayconnect;
 
     @Override
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         etBmail = (EditText) findViewById(R.id.Bmail);
+        etname = (EditText) findViewById(R.id.etname);
         etBpass = (EditText) findViewById(R.id.Bpass);
         btnB = (Button) findViewById(R.id.btnB);
         tvBRegister = (TextView) findViewById(R.id.tvRegister);
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 tvBTitle.setText("Register");
                 etBmail.setVisibility(View.VISIBLE);
                 etBpass.setVisibility(View.VISIBLE);
+                etname.setVisibility(View.VISIBLE);
                 btnB.setText("Register");
                 registered = false;
                 logOption();
@@ -125,23 +127,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void logOrReg(View view) {
-        mail = etBmail.getText().toString();
-        pass = etBpass.getText().toString();
-        if (mail.isEmpty() || pass.isEmpty())
+        mailU = etBmail.getText().toString();
+        passU = etBpass.getText().toString();
+
+        if (mailU.isEmpty() || passU.isEmpty())
             Toast.makeText(this, "please fill all the necessary fields", Toast.LENGTH_SHORT).show();
         else {
-            if ((!mail.contains("@") || !mail.endsWith(".il")) && (!mail.endsWith(".com") || !mail.contains("@"))) {
+            if ((!mailU.contains("@") || !mailU.endsWith(".il")) && (!mailU.endsWith(".com") || !mailU.contains("@"))) {
                 etBmail.setError("Mail is Invalid!");
             }
-            if (pass.length() < 6) {
+            if (passU.length() < 6) {
                 etBpass.setError("Password Needs To Be At Least 5 Characters!");
             } else {
                 if (registered) {
-                    mail = etBmail.getText().toString();
-                    pass = etBpass.getText().toString();
+                    mailU = etBmail.getText().toString();
+                    passU = etBpass.getText().toString();
 
                     final ProgressDialog pd = ProgressDialog.show(this, "Login", "Connecting...", true);
-                    mAuth.signInWithEmailAndPassword(mail, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(mailU, passU).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             pd.dismiss();
@@ -162,10 +165,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    mail = etBmail.getText().toString();
-                    pass = etBpass.getText().toString();
+                    mailU = etBmail.getText().toString();
+                    passU = etBpass.getText().toString();
+                    nameU = etname.getText().toString();
                     final ProgressDialog pd = ProgressDialog.show(this, "Register", "Registering...", true);
-                    mAuth.createUserWithEmailAndPassword(mail, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    mAuth.createUserWithEmailAndPassword(mailU, passU).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             pd.dismiss();
@@ -176,12 +180,13 @@ public class MainActivity extends AppCompatActivity {
                                 editor.commit();
                                 Log.d("BRegistr", "createUserWithEmail:success");
                                 FirebaseUser UserB = mAuth.getCurrentUser();
-                                uid = UserB.getUid();
-                                userBdb = new Userr("" , pass, mail, "", "",  uid);
-                                refbus.child(uid).setValue(userBdb);
+                              /*  uidU = UserB.getUid();
+                                userBdb = new UserC(nameU, passU, mailU, "", "");
+                                refbus.child(uidU).setValue(userBdb);**/
                                 Toast.makeText(MainActivity.this, "Successful Registration", Toast.LENGTH_SHORT).show();
                                 Intent si = new Intent(MainActivity.this, PersonalArea.class);
                                 si.putExtra("UesrB", true);
+                                si.putExtra("nnn", nameU);
                                 startActivity(si);
                                 finish();
                             } else {
@@ -198,4 +203,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
+

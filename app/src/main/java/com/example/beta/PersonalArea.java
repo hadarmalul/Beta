@@ -14,8 +14,12 @@ public class PersonalArea extends AppCompatActivity {
         setContentView(R.layout.activity_personal_area);
     }
 
+    Intent gi = new Intent();
+    String nameP = gi.getStringExtra("nnn");
+
     public void ex(View view) {
-        Intent si = new Intent(PersonalArea.this,Expenses.class);
-        startActivity(si);
+        Intent ssi = new Intent(PersonalArea.this,Expenses.class);
+        ssi.putExtra("nn", nameP);
+        startActivity(ssi);
     }
 }

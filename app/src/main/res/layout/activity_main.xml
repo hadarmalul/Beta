@@ -38,16 +38,16 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10" />
+            android:layout_weight="5" />
 
         <EditText
             android:id="@+id/Bmail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8"
+            android:layout_weight="7"
             android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="Enter Mail" />
+            android:hint="Enter Mail"
+            android:inputType="textEmailAddress" />
 
         <Space
             android:layout_width="match_parent"
@@ -58,10 +58,25 @@
             android:id="@+id/Bpass"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="7"
+            android:ems="10"
+            android:hint="Enter Password"
+            android:inputType="textPassword" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4" />
+
+        <EditText
+            android:id="@+id/etname"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="8"
             android:ems="10"
-            android:inputType="textPassword"
-            android:hint="Enter Password" />
+            android:hint="Name"
+            android:visibility="invisible"
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"
