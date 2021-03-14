@@ -17,13 +17,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import static com.example.beta.FBref.mAuth;
-import static com.example.beta.FBref.refEUID;
 import static com.example.beta.FBref.refEX;
+import static com.example.beta.FBref.refbus;
 
 public class Expenses extends AppCompatActivity {
 
     EditText et1, et2, et3;
-    String Euid;
+    String Etype, Edate, Eprice, Euid;
+    private expensesC exp;
 
 
     @Override
@@ -54,11 +55,9 @@ public class Expenses extends AppCompatActivity {
         Euid = user.getUid();
 
         updateEXui(user);
-
-        refEUID.setValue(Euid);
-        refEX.child("type").setValue(sug);
-        refEX.child("date").setValue(date);
-        refEX.child("price").setValue(sum);
+     
+        exp = new expensesC(Etype, Edate, Eprice, Euid);
+        refbus.child(Euid).setValue(exp);
 
 
         StringBuilder data = new StringBuilder();

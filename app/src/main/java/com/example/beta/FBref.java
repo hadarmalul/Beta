@@ -10,8 +10,8 @@ public class FBref {
     public static FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public static FirebaseDatabase FBDB = FirebaseDatabase.getInstance();
-    public static DatabaseReference refEUID = FBDB.getReference("EXuid");
-    public static DatabaseReference refEX = refEUID.child("Exp");
-    public static DatabaseReference refIN = refEUID.child("Inc");
+    public static DatabaseReference refbus = FBDB.getReference("Businesses");
+    public static DatabaseReference refEX =FBDB.getReference("Exp");
+    public static DatabaseReference refIN = FBDB.getReference("Inc");
 
 }

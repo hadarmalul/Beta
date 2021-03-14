@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import static com.example.beta.FBref.mAuth;
-import static com.example.beta.FBref.refEUID;
 import static com.example.beta.FBref.refEX;
 import static com.example.beta.FBref.refIN;
 

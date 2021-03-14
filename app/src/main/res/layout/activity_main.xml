@@ -4,26 +4,126 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:gravity="center"
     tools:context=".MainActivity">
 
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="45" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:onClick="log"
-        android:text="Button" />
 
     <Space
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="45" />
+        android:layout_height="match_parent"
+        android:layout_weight="15" />
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="70"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:autoSizeTextType="uniform"
+            android:text="connection"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_weight="10" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10" />
+
+        <EditText
+            android:id="@+id/Bmail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="Enter Mail" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4" />
+
+        <EditText
+            android:id="@+id/Bpass"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Enter Password" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="10">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"/>
+
+            <Button
+                android:id="@+id/btnB"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="35"
+                android:onClick="logOrReg"
+                android:text="connect"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"/>
+
+            <TextView
+                android:id="@+id/tvRegister"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="32"
+                android:textColor="#000000"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"/>
+            <CheckBox
+                android:id="@+id/cBstayconnect"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:checked="false"
+                android:layout_weight="3"
+                android:visibility="gone"
+
+                android:text="stay connected" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20" />
+
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="15" />
 </LinearLayout>
-
