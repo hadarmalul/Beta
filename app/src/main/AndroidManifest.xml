@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Incomes"></activity>
+        <activity android:name=".Suppliers"></activity>
+        <activity android:name=".Incomes" />
         <activity android:name=".Expenses" />
         <activity android:name=".PersonalArea" />
         <activity android:name=".MainActivity">

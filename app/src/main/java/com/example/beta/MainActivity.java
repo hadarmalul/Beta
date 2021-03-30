@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 etBmail.setError("Mail is Invalid!");
             }
             if (passU.length() < 6) {
-                etBpass.setError("Password Needs To Be At Least 5 Characters!");
+                etBpass.setError("Password Needs To Be At Least 6 Characters!");
             } else {
                 if (registered) {
                     mailU = etBmail.getText().toString();
@@ -179,14 +179,12 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putBoolean("stayConnect", cBstayconnect.isChecked());
                                 editor.commit();
                                 Log.d("BRegistr", "createUserWithEmail:success");
-                                FirebaseUser UserB = mAuth.getCurrentUser();
-                              /*  uidU = UserB.getUid();
+                                /*FirebaseUser UserB = mAuth.getCurrentUser();
+                                uidU = UserB.getUid();
                                 userBdb = new UserC(nameU, passU, mailU, "", "");
                                 refbus.child(uidU).setValue(userBdb);**/
                                 Toast.makeText(MainActivity.this, "Successful Registration", Toast.LENGTH_SHORT).show();
                                 Intent si = new Intent(MainActivity.this, PersonalArea.class);
-                                si.putExtra("UesrB", true);
-                                si.putExtra("nnn", nameU);
                                 startActivity(si);
                                 finish();
                             } else {
