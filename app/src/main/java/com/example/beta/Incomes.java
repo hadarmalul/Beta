@@ -162,7 +162,10 @@ public class Incomes extends AppCompatActivity {
             Intent si = new Intent(this, Incomes.class);
             startActivity(si);
         }
-
+        if (st.equals("Graphs")){
+            Intent si = new Intent(this, Graphs.class);
+            startActivity(si);
+        }
         return true;
     }
 

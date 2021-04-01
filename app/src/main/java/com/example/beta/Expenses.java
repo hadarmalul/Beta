@@ -41,6 +41,7 @@ public class Expenses extends AppCompatActivity {
     String[] datearr = {"1"};
     String[] pricearr = {"1"};
     ArrayList<String> exList = new ArrayList<String>();
+    ArrayList<expensesC> exValues = new ArrayList<expensesC>();
     String str1, str2;
     StringBuilder Data = new StringBuilder();
     DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -55,12 +56,35 @@ public class Expenses extends AppCompatActivity {
         et3 = (EditText) findViewById(R.id.et3);
         tvdate = (TextView) findViewById(R.id.tvdate);
 
+        ValueEventListener ExListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot ds) {
+
+                exList.clear();
+                exValues.clear();
+
+                for (DataSnapshot data : ds.getChildren()) {
+
+                    expensesC exp2 = data.getValue(expensesC.class);
+                    str2 = exp2.getEtype();
+                    exList.add(str2);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        refbus.addValueEventListener(ExListener);
+
         tvdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
-                year = year - 13;
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
@@ -101,28 +125,7 @@ public class Expenses extends AppCompatActivity {
         refEX.child(Euid).child(Deuid).setValue(exp);
         x++;
 
-        ValueEventListener ExListener = new ValueEventListener() {
 
-
-            @Override
-            public void onDataChange(DataSnapshot ds) {
-
-                exList.clear();
-
-                for (DataSnapshot data : ds.getChildren()) {
-
-                    str1 = exp.getEtype();
-                    exList.add(str1);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        refbus.addValueEventListener(ExListener);
 
         Data.append("סכום ,תאריך, ");
         for (int i = 0; i < pricearr.length; i++) {
@@ -164,6 +167,10 @@ public class Expenses extends AppCompatActivity {
             }
             if (st.equals("Incomes")){
                 Intent si = new Intent(this, Incomes.class);
+                startActivity(si);
+            }
+            if (st.equals("Graphs")){
+                Intent si = new Intent(this, Graphs.class);
                 startActivity(si);
             }
 

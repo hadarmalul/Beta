@@ -5,4 +5,6 @@
         android:title="Expenses" />
     <item
         android:title="Incomes" />
+    <item
+        android:title="Graphs" />
 </menu>
