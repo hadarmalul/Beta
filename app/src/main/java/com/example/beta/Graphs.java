@@ -54,17 +54,27 @@ public class Graphs extends AppCompatActivity {
                 secondInput_3 = secondNum_3.getText().toString();
                 firstInput_4 = firstNum_4.getText().toString();
                 secondInput_4 = secondNum_4.getText().toString();
-                StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-                staticLabelsFormatter.setHorizontalLabels(new String[] {"hi", "graph", "bla", "blah"});
-                staticLabelsFormatter.setVerticalLabels(new String[] {secondInput_1, secondInput_2, secondInput_3, secondInput_4});
-                graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+              /*  StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+                staticLabelsFormatter.setHorizontalLabels(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"});
+                graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);**/
               try {
                     LineGraphSeries <DataPoint> series = new LineGraphSeries< >(new DataPoint[] {
 
-                          new DataPoint(Integer.valueOf(firstInput_1), Integer.valueOf(secondInput_1)),
-                          new DataPoint(Integer.valueOf(firstInput_2), Integer.valueOf(secondInput_2)),
-                          new DataPoint(Integer.valueOf(firstInput_3), Integer.valueOf(secondInput_3)),
-                          new DataPoint(Integer.valueOf(firstInput_4), Integer.valueOf(secondInput_4))
+                            new DataPoint(0, 0),
+                            new DataPoint(1, Integer.valueOf(secondInput_1)),
+                            new DataPoint(2, Integer.valueOf(secondInput_2)),
+                            new DataPoint(3, Integer.valueOf(secondInput_3)),
+                            new DataPoint(4, Integer.valueOf(secondInput_4)),
+                            new DataPoint(5, Integer.valueOf(secondInput_1)),
+                            new DataPoint(6, Integer.valueOf(secondInput_2)),
+                            new DataPoint(7, Integer.valueOf(secondInput_1)),
+                            new DataPoint(8, Integer.valueOf(secondInput_2)),
+                            new DataPoint(9, Integer.valueOf(secondInput_3)),
+                            new DataPoint(10, Integer.valueOf(secondInput_4)),
+                            new DataPoint(11, Integer.valueOf(secondInput_1)),
+                            new DataPoint(12, Integer.valueOf(secondInput_2))
+
                   });
                   graph.addSeries(series);
                 } catch (IllegalArgumentException e) {

@@ -13,13 +13,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
@@ -28,21 +32,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import static com.example.beta.FBref.mAuth;
-import static com.example.beta.FBref.refEX;
-import static com.example.beta.FBref.refIN;
 import static com.example.beta.FBref.refbus;
 
-public class Incomes extends AppCompatActivity {
+public class Incomes extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     EditText et1, et2, et3;
-    int x=0;
+    int x = 0;
     TextView tvdate2;
-    String Iuid, Diuid;
+    String Iuid = " ", Diuid = " ", monthI = "0";
+    android.widget.Spinner Spinner, Spinner2;
     private IncomesC inc;
-    String[] datearr = {"1"};
-    String[] pricearr = {"1"};
-    ArrayList<String> incList = new ArrayList<>();
-    String str1, str2;
+    ArrayList<String> incList = new ArrayList<String>();
+    ArrayList<String> incList2 = new ArrayList<String>();
+    ArrayList<String> incList3 = new ArrayList<String>();
+    String[] spinE = {"Date", "type", "price"};
+    String[] spinE2 = {"this month", "last 6 months", "last year"};
+    String str1, str2, str3;
     StringBuilder Data = new StringBuilder();
     DatePickerDialog.OnDateSetListener mDateSetListener;
 
@@ -54,6 +59,13 @@ public class Incomes extends AppCompatActivity {
         et1 = (EditText) findViewById(R.id.et1);
         et3 = (EditText) findViewById(R.id.et3);
         tvdate2 = (TextView) findViewById(R.id.tvdate2);
+
+        Spinner = (Spinner) findViewById(R.id.Spinner);
+        Spinner2 = (Spinner) findViewById(R.id.Spinner2);
+
+        Spinner.setOnItemSelectedListener(this);
+        Spinner2.setOnItemSelectedListener(this);
+
 
         tvdate2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,48 +94,31 @@ public class Incomes extends AppCompatActivity {
                 Diuid = String.valueOf(dayOfMonth) + String.valueOf(month) + String.valueOf(year);
             };
         };
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        Iuid = user.getUid();
+
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE);
+        Spinner.setAdapter(adp);
+        ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE2);
+        Spinner2.setAdapter(adp2);
     }
 
 
     public void csvi(View view) {
 
-        String sug2 = et1.getText().toString();
-        String price2 = et3.getText().toString();
+        String sug = et1.getText().toString();
+        String price = et3.getText().toString();
 
-
-        FirebaseUser user2 = mAuth.getCurrentUser();
-        Iuid = user2.getUid();
-
-        inc = new IncomesC(sug2 , Diuid + String.valueOf(x), price2, Iuid);
-        refIN.child(Iuid).child(Diuid).setValue(inc);
+        inc = new IncomesC(sug, Diuid, price, monthI, Iuid);
+        refbus.child(Iuid + "E").setValue(inc);
         x++;
 
-        ValueEventListener ExListener = new ValueEventListener() {
+        Data.append("סכום ,תאריך, ");
+        for (int i = 0; i < incList.size(); i++) {
+            Data.append("\n" + incList3.get(i) + "," + incList2.get(i) + "," + incList.get(i));
+        }
 
-
-            @Override
-            public void onDataChange(DataSnapshot ds) {
-
-                incList.clear();
-
-                for (DataSnapshot data : ds.getChildren()) {
-
-                    str1 = inc.getItype();
-                    incList.add(str1);
-
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        refbus.addValueEventListener(ExListener);
-
-      /*  Data.append("סכום ,תאריך, ");
-        for (int i = 0; i<pricearr.length; i++) {
-            Data.append("\n" + pricearr[i] + "," + datearr[i] + "," + incList.get(i));
-        }**/
 
         try {
             FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
@@ -140,10 +135,189 @@ public class Incomes extends AppCompatActivity {
             fileIntent.putExtra(Intent.EXTRA_STREAM, path);
             startActivity(Intent.createChooser(fileIntent, "send mail"));
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (adapterView == Spinner) {
+            if (i == 0) {
+                Query query = refbus.orderByChild("edate");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3 + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+
+            if (i == 1) {
+                Query query = refbus.orderByChild("etype");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3 + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+
+            if (i == 2) {
+                Query query = refbus.orderByChild("eprice");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3 + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+        }
+        else {
+            if (i == 0) {
+                Query query = refbus.orderByChild("edate");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3 + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+
+            if (i == 1) {
+                Query query = refbus.orderByChild("etype");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3 + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+
+            if (i == 2) {
+                Query query = refbus.orderByChild("eprice");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3 + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public boolean onCreateOptionsMenu (Menu menu) {
@@ -168,5 +342,4 @@ public class Incomes extends AppCompatActivity {
         }
         return true;
     }
-
-    }
+}
