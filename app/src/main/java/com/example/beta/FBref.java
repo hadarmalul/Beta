@@ -12,7 +12,7 @@ public class FBref {
     public static FirebaseDatabase FBDB = FirebaseDatabase.getInstance();
     public static DatabaseReference refbus = FBDB.getReference("Businesses");
 
-    public static DatabaseReference refEX =refbus.child("Exp");
-    public static DatabaseReference refIN = refbus.child("Inc");
+    public static DatabaseReference refEX = FBDB.getReference("Expenses");
+
 
 }

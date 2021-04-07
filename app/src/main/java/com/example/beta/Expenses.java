@@ -32,14 +32,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import static com.example.beta.FBref.mAuth;
+import static com.example.beta.FBref.refEX;
 import static com.example.beta.FBref.refbus;
 
-public class Expenses extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Expenses extends AppCompatActivity {
 
     EditText et1, et2, et3;
     int x = 0;
     TextView tvdate;
-    String Euid = " ", Deuid = " ", monthE = "0";
+    String Euid = " ", Deuid = " ", monthE = " ";
     Spinner Spinner, Spinner2;
     private expensesC exp;
     ArrayList<String> exList = new ArrayList<String>();
@@ -63,8 +64,6 @@ public class Expenses extends AppCompatActivity implements AdapterView.OnItemSel
         Spinner = (Spinner) findViewById(R.id.Spinner);
         Spinner2 = (Spinner) findViewById(R.id.Spinner2);
 
-        Spinner.setOnItemSelectedListener(this);
-        Spinner2.setOnItemSelectedListener(this);
 
         tvdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +97,6 @@ public class Expenses extends AppCompatActivity implements AdapterView.OnItemSel
         Euid = user.getUid();
 
 
-
         ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE);
         Spinner.setAdapter(adp);
         ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE2);
@@ -114,214 +112,120 @@ public class Expenses extends AppCompatActivity implements AdapterView.OnItemSel
         String price = et3.getText().toString();
 
         exp = new expensesC(sug, Deuid, price, monthE, Euid);
-        refbus.child(Euid + "E").setValue(exp);
-        x++;
+        refEX.child(Euid).child(Deuid).setValue(exp);
 
+
+        if (Spinner.getSelectedItemPosition() == 0) {
+            Query query = refEX.child(Euid).orderByChild("edate");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dS) {
+                    exList.clear();
+                    exList2.clear();
+                    exList3.clear();
+
+                    for (DataSnapshot data : dS.getChildren()) {
+                        expensesC exp2 = data.getValue(expensesC.class);
+
+                        str1 = exp2.getEtype();
+                        str2 = exp2.getEdate();
+                        str3 = exp2.getEprice();
+                        exList.add(str1 + "");
+                        exList2.add(str2 + "");
+                        exList3.add(str3 + "");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+
+        if (Spinner.getSelectedItemPosition() == 1) {
+            Query query = refEX.child(Euid).orderByChild("etype");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dS) {
+                    exList.clear();
+                    exList2.clear();
+                    exList3.clear();
+
+                    for (DataSnapshot data : dS.getChildren()) {
+                        expensesC exp2 = data.getValue(expensesC.class);
+
+                        str1 = exp2.getEtype();
+                        str2 = exp2.getEdate();
+                        str3 = exp2.getEprice();
+                        exList.add(str1 + "");
+                        exList2.add(str2 + "");
+                        exList3.add(str3 + "");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
+
+        if (Spinner.getSelectedItemPosition() == 2) {
+            Query query = refEX.child(Euid).orderByChild("eprice");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dS) {
+                    exList.clear();
+                    exList2.clear();
+                    exList3.clear();
+
+                    for (DataSnapshot data : dS.getChildren()) {
+                        expensesC exp2 = data.getValue(expensesC.class);
+
+                        str1 = exp2.getEtype();
+                        str2 = exp2.getEdate();
+                        str3 = exp2.getEprice();
+                        exList.add(str1 + "");
+                        exList2.add(str2 + "");
+                        exList3.add(str3 + "");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
         Data.append("סכום ,תאריך, ");
         for (int i = 0; i < exList.size(); i++) {
             Data.append("\n" + exList3.get(i) + "," + exList2.get(i) + "," + exList.get(i));
         }
 
 
-            try {
-                FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
-                out.write((Data.toString()).getBytes());
-                out.close();
+        try {
+            FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
+            out.write((Data.toString()).getBytes());
+            out.close();
 
-                Context context = getApplicationContext();
-                File filelocation = new File(getFilesDir(), "data.csv");
-                Uri path = FileProvider.getUriForFile(context, "com.example.alpha1.fileprovider", filelocation);
-                Intent fileIntent = new Intent(Intent.ACTION_SEND);
-                fileIntent.setType("text/csv");
-                fileIntent.putExtra(Intent.EXTRA_SUBJECT, "data");
-                fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                fileIntent.putExtra(Intent.EXTRA_STREAM, path);
-                startActivity(Intent.createChooser(fileIntent, "send mail"));
+            Context context = getApplicationContext();
+            File filelocation = new File(getFilesDir(), "data.csv");
+            Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
+            Intent fileIntent = new Intent(Intent.ACTION_SEND);
+            fileIntent.setType("text/csv");
+            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "data");
+            fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+            startActivity(Intent.createChooser(fileIntent, "send mail"));
 
-            } catch (Exception e) {
-                e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
 
-            }
         }
-
-        @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            if (adapterView == Spinner) {
-                if (i == 0) {
-                    Query query = refbus.orderByChild("edate");
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                        @Override
-                        public void onDataChange(DataSnapshot dS) {
-                            exList.clear();
-                            exList2.clear();
-                            exList3.clear();
-
-                            for (DataSnapshot data : dS.getChildren()) {
-                                expensesC exp2 = data.getValue(expensesC.class);
-
-                                str1 = exp2.getEtype();
-                                str2 = exp2.getEdate();
-                                str3 = exp2.getEprice();
-                                exList.add(str1 + "");
-                                exList2.add(str2 + "");
-                                exList3.add(str3 + "");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                }
-
-                if (i == 1) {
-                    Query query = refbus.orderByChild("etype");
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                        @Override
-                        public void onDataChange(DataSnapshot dS) {
-                            exList.clear();
-                            exList2.clear();
-                            exList3.clear();
-
-                            for (DataSnapshot data : dS.getChildren()) {
-                                expensesC exp2 = data.getValue(expensesC.class);
-
-                                str1 = exp2.getEtype();
-                                str2 = exp2.getEdate();
-                                str3 = exp2.getEprice();
-                                exList.add(str1 + "");
-                                exList2.add(str2 + "");
-                                exList3.add(str3 + "");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                }
-
-                if (i == 2) {
-                    Query query = refbus.orderByChild("eprice");
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                        @Override
-                        public void onDataChange(DataSnapshot dS) {
-                            exList.clear();
-                            exList2.clear();
-                            exList3.clear();
-
-                            for (DataSnapshot data : dS.getChildren()) {
-                                expensesC exp2 = data.getValue(expensesC.class);
-
-                                str1 = exp2.getEtype();
-                                str2 = exp2.getEdate();
-                                str3 = exp2.getEprice();
-                                exList.add(str1 + "");
-                                exList2.add(str2 + "");
-                                exList3.add(str3 + "");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                }
-            }
-            else {
-                if (i == 0) {
-                        Query query = refbus.orderByChild("edate");
-                        query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot dS) {
-                                exList.clear();
-                                exList2.clear();
-                                exList3.clear();
-
-                                for (DataSnapshot data : dS.getChildren()) {
-                                    expensesC exp2 = data.getValue(expensesC.class);
-
-                                    str1 = exp2.getEtype();
-                                    str2 = exp2.getEdate();
-                                    str3 = exp2.getEprice();
-                                    exList.add(str1 + "");
-                                    exList2.add(str2 + "");
-                                    exList3.add(str3 + "");
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-                        });
-                }
-
-                if (i == 1) {
-                    Query query = refbus.orderByChild("etype");
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                        @Override
-                        public void onDataChange(DataSnapshot dS) {
-                            exList.clear();
-                            exList2.clear();
-                            exList3.clear();
-
-                            for (DataSnapshot data : dS.getChildren()) {
-                                expensesC exp2 = data.getValue(expensesC.class);
-
-                                str1 = exp2.getEtype();
-                                str2 = exp2.getEdate();
-                                str3 = exp2.getEprice();
-                                exList.add(str1 + "");
-                                exList2.add(str2 + "");
-                                exList3.add(str3 + "");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                }
-
-                if (i == 2) {
-                    Query query = refbus.orderByChild("eprice");
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                        @Override
-                        public void onDataChange(DataSnapshot dS) {
-                            exList.clear();
-                            exList2.clear();
-                            exList3.clear();
-
-                            for (DataSnapshot data : dS.getChildren()) {
-                                expensesC exp2 = data.getValue(expensesC.class);
-
-                                str1 = exp2.getEtype();
-                                str2 = exp2.getEdate();
-                                str3 = exp2.getEprice();
-                                exList.add(str1 + "");
-                                exList2.add(str2 + "");
-                                exList3.add(str3 + "");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                }
-            }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
 
     public boolean onCreateOptionsMenu (Menu menu) {
 
