@@ -2,13 +2,14 @@ package com.example.beta;
 
 public class expensesC {
     
-    private String Etype, Edate, Eprice,Emonth, Euid;
+    private String Etype, Edate, Emonth, Euid;
+    private int Eprice;
     
     public expensesC() {
         
     }
 
-    public expensesC(String Etype, String Edate, String Eprice,String Emonth, String Euid) {
+    public expensesC(String Etype, String Edate, int Eprice,String Emonth, String Euid) {
 
         this.Etype = Etype;
         this.Edate = Edate;
@@ -43,11 +44,11 @@ public class expensesC {
         Euid = euid;
     }
 
-    public String getEprice() {
+    public int getEprice() {
         return Eprice;
     }
 
-    public void setEprice(String eprice) {
+    public void setEprice(int eprice) {
         Eprice = eprice;
     }
 

@@ -28,8 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
@@ -38,7 +40,7 @@ import static com.example.beta.FBref.refbus;
 public class Expenses extends AppCompatActivity {
 
     EditText et1, et2, et3;
-    int x = 0;
+    int x = 0, pricei;
     TextView tvdate;
     String Euid = " ", Deuid = " ", monthE = " ";
     Spinner Spinner, Spinner2;
@@ -48,9 +50,13 @@ public class Expenses extends AppCompatActivity {
     ArrayList<String> exList3 = new ArrayList<String>();
     String[] spinE = {"Date", "type", "price"};
     String[] spinE2 = {"this month", "last 6 months", "last year"};
-    String str1, str2, str3;
+    String str1, str2;
+    int str3;
     StringBuilder Data = new StringBuilder();
     DatePickerDialog.OnDateSetListener mDateSetListener;
+    private SimpleDateFormat dateFormat;
+    private String date;
+    private Calendar calendar;
 
 
     @Override
@@ -102,6 +108,31 @@ public class Expenses extends AppCompatActivity {
         ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE2);
         Spinner2.setAdapter(adp2);
 
+        Query query = refEX.child(Euid).orderByChild("edate");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dS) {
+                exList.clear();
+                exList2.clear();
+                exList3.clear();
+
+                for (DataSnapshot data : dS.getChildren()) {
+                    expensesC exp2 = data.getValue(expensesC.class);
+
+                    str1 = exp2.getEtype();
+                    str2 = exp2.getEdate();
+                    str3 = exp2.getEprice();
+                    exList.add(str1 + "");
+                    exList2.add(str2 + "");
+                    exList3.add(str3 + "");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
 
@@ -198,6 +229,7 @@ public class Expenses extends AppCompatActivity {
                 }
             });
         }
+        Data.setLength(0);
         Data.append("סכום ,תאריך, ");
         for (int i = 0; i < exList.size(); i++) {
             Data.append("\n" + exList3.get(i) + "," + exList2.get(i) + "," + exList.get(i));
@@ -205,16 +237,22 @@ public class Expenses extends AppCompatActivity {
 
 
         try {
-            FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
+            String name ="data";
+            calendar = Calendar.getInstance();
+            dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+            date = dateFormat.format(calendar.getTime());
+            name += date;
+            name += ".csv";
+            FileOutputStream out = openFileOutput(name, Context.MODE_PRIVATE);
             out.write((Data.toString()).getBytes());
             out.close();
 
             Context context = getApplicationContext();
-            File filelocation = new File(getFilesDir(), "data.csv");
+            File filelocation = new File(getFilesDir(), name);
             Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
             Intent fileIntent = new Intent(Intent.ACTION_SEND);
             fileIntent.setType("text/csv");
-            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "data");
+            fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
             fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             fileIntent.putExtra(Intent.EXTRA_STREAM, path);
             startActivity(Intent.createChooser(fileIntent, "send mail"));
