@@ -40,14 +40,14 @@ import static com.example.beta.FBref.refbus;
 public class Expenses extends AppCompatActivity {
 
     EditText et1, et2, et3;
-    int x = 0, pricei;
+    int x = 0, pricei, uidi;
     TextView tvdate;
     String Euid = " ", Deuid = " ", monthE = " ";
     Spinner Spinner, Spinner2;
     private expensesC exp;
     ArrayList<String> exList = new ArrayList<String>();
     ArrayList<String> exList2 = new ArrayList<String>();
-    ArrayList<String> exList3 = new ArrayList<String>();
+    ArrayList<Integer> exList3 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
     String[] spinE2 = {"this month", "last 6 months", "last year"};
     String str1, str2;
@@ -124,8 +124,8 @@ public class Expenses extends AppCompatActivity {
                     str2 = exp2.getEdate();
                     str3 = exp2.getEprice();
                     exList.add(str1 + "");
-                    exList2.add(str2 + "");
-                    exList3.add(str3 + "");
+                    exList2.add(str2+ "");
+                    exList3.add(str3);
                 }
             }
 
@@ -141,8 +141,10 @@ public class Expenses extends AppCompatActivity {
 
         String sug = et1.getText().toString();
         String price = et3.getText().toString();
+        pricei = Integer.parseInt(price);
 
-        exp = new expensesC(sug, Deuid, price, monthE, Euid);
+
+        exp = new expensesC(sug,Deuid, pricei, monthE, Euid);
         refEX.child(Euid).child(Deuid).setValue(exp);
 
 
@@ -164,7 +166,7 @@ public class Expenses extends AppCompatActivity {
                         str3 = exp2.getEprice();
                         exList.add(str1 + "");
                         exList2.add(str2 + "");
-                        exList3.add(str3 + "");
+                        exList3.add(str3);
                     }
                 }
 
@@ -192,7 +194,7 @@ public class Expenses extends AppCompatActivity {
                         str3 = exp2.getEprice();
                         exList.add(str1 + "");
                         exList2.add(str2 + "");
-                        exList3.add(str3 + "");
+                        exList3.add(str3);
                     }
                 }
 
@@ -219,8 +221,8 @@ public class Expenses extends AppCompatActivity {
                         str2 = exp2.getEdate();
                         str3 = exp2.getEprice();
                         exList.add(str1 + "");
-                        exList2.add(str2 + "");
-                        exList3.add(str3 + "");
+                        exList2.add(str2+ "");
+                        exList3.add(str3);
                     }
                 }
 
