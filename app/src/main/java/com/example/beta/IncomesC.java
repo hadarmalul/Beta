@@ -1,14 +1,17 @@
 package com.example.beta;
 
-public class IncomesC {
+import java.io.Serializable;
 
-    private String Itype, Idate, Iprice, Imonth, Iuid;
+public class IncomesC implements Serializable {
+
+    private String Itype, Idate, Imonth, Iuid;
+    private int  Iprice;
 
     public IncomesC() {
 
     }
 
-    public IncomesC(String Itype, String Idate, String Iprice, String Imonth, String Iuid) {
+    public IncomesC(String Itype, String Idate, int Iprice, String Imonth, String Iuid) {
 
         this.Itype = Itype;
         this.Idate = Idate;
@@ -42,11 +45,11 @@ public class IncomesC {
         Iuid = iuid;
     }
 
-    public String getIprice() {
+    public int getIprice() {
         return Iprice;
     }
 
-    public void setIprice(String iprice) {
+    public void setIprice(int iprice) {
         Iprice = iprice;
     }
 

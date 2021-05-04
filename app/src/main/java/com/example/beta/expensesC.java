@@ -1,15 +1,17 @@
 package com.example.beta;
 
-public class expensesC {
+import java.io.Serializable;
+
+public class expensesC implements Serializable {
     
-    private String Etype, Edate, Emonth, Euid;
-    private int Eprice;
+    private String Etype, Edate, Euid;
+    private int Eprice, Emonth;
     
     public expensesC() {
         
     }
 
-    public expensesC(String Etype, String Edate, int Eprice,String Emonth, String Euid) {
+    public expensesC(String Etype, String Edate, int Eprice,int Emonth, String Euid) {
 
         this.Etype = Etype;
         this.Edate = Edate;
@@ -52,11 +54,11 @@ public class expensesC {
         Eprice = eprice;
     }
 
-    public String getEmonth() {
+    public int getEmonth() {
         return Emonth;
     }
 
-    public void setEmonth(String emonth) {
+    public void setEmonth(int emonth) {
         Emonth = emonth;
     }
 }

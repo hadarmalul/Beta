@@ -40,18 +40,19 @@ import static com.example.beta.FBref.refbus;
 public class Expenses extends AppCompatActivity {
 
     EditText et1, et2, et3;
-    int x = 0, pricei, uidi;
+    int x = 0, pricei, monthE;
     TextView tvdate;
-    String Euid = " ", Deuid = " ", monthE = " ";
+    String Euid = " ", Deuid = " ",  uidi = " ", uidi2 = " ";
     Spinner Spinner, Spinner2;
     private expensesC exp;
-    ArrayList<String> exList = new ArrayList<String>();
-    ArrayList<String> exList2 = new ArrayList<String>();
-    ArrayList<Integer> exList3 = new ArrayList<Integer>();
+    public ArrayList<String> exList = new ArrayList<String>();
+    public ArrayList<String> exList2 = new ArrayList<String>();
+    public ArrayList<Integer> exList3 = new ArrayList<Integer>();
+    public ArrayList<Integer> exList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
     String[] spinE2 = {"this month", "last 6 months", "last year"};
     String str1, str2;
-    int str3;
+    int str3, str4;
     StringBuilder Data = new StringBuilder();
     DatePickerDialog.OnDateSetListener mDateSetListener;
     private SimpleDateFormat dateFormat;
@@ -91,11 +92,12 @@ public class Expenses extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month++;
-                Deuid = dayOfMonth + "/" + month + "/" + year;
+                uidi = dayOfMonth + "/" + month + "/" + year;
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-                tvdate.setText(Deuid);
-                Deuid = String.valueOf(dayOfMonth) + String.valueOf(month) + String.valueOf(year);
-                monthE = String.valueOf(month);
+                tvdate.setText(uidi);
+                Deuid = String.valueOf(year) + String.valueOf(month) + String.valueOf(dayOfMonth);
+                uidi2 = String.valueOf(dayOfMonth) + String.valueOf(month) + String.valueOf(year);
+                monthE = month;
             }
         };
 
@@ -116,6 +118,7 @@ public class Expenses extends AppCompatActivity {
                 exList.clear();
                 exList2.clear();
                 exList3.clear();
+                exList4.clear();
 
                 for (DataSnapshot data : dS.getChildren()) {
                     expensesC exp2 = data.getValue(expensesC.class);
@@ -123,9 +126,11 @@ public class Expenses extends AppCompatActivity {
                     str1 = exp2.getEtype();
                     str2 = exp2.getEdate();
                     str3 = exp2.getEprice();
+                    str4 = exp2.getEmonth();
                     exList.add(str1 + "");
                     exList2.add(str2+ "");
                     exList3.add(str3);
+                    exList4.add(str4);
                 }
             }
 
@@ -144,12 +149,12 @@ public class Expenses extends AppCompatActivity {
         pricei = Integer.parseInt(price);
 
 
-        exp = new expensesC(sug,Deuid, pricei, monthE, Euid);
+        exp = new expensesC(sug,uidi, pricei, monthE, Euid);
         refEX.child(Euid).child(Deuid).setValue(exp);
 
 
         if (Spinner.getSelectedItemPosition() == 0) {
-            Query query = refEX.child(Euid).orderByChild("edate");
+            Query query = refEX.child(Euid).orderByChild(Deuid);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -157,6 +162,7 @@ public class Expenses extends AppCompatActivity {
                     exList.clear();
                     exList2.clear();
                     exList3.clear();
+                    exList4.clear();
 
                     for (DataSnapshot data : dS.getChildren()) {
                         expensesC exp2 = data.getValue(expensesC.class);
@@ -164,9 +170,11 @@ public class Expenses extends AppCompatActivity {
                         str1 = exp2.getEtype();
                         str2 = exp2.getEdate();
                         str3 = exp2.getEprice();
+                        str4 = exp2.getEmonth();
                         exList.add(str1 + "");
-                        exList2.add(str2 + "");
+                        exList2.add(str2+ "");
                         exList3.add(str3);
+                        exList4.add(str4);
                     }
                 }
 
@@ -192,9 +200,11 @@ public class Expenses extends AppCompatActivity {
                         str1 = exp2.getEtype();
                         str2 = exp2.getEdate();
                         str3 = exp2.getEprice();
+                        str4 = exp2.getEmonth();
                         exList.add(str1 + "");
-                        exList2.add(str2 + "");
+                        exList2.add(str2+ "");
                         exList3.add(str3);
+                        exList4.add(str4);
                     }
                 }
 
@@ -213,6 +223,7 @@ public class Expenses extends AppCompatActivity {
                     exList.clear();
                     exList2.clear();
                     exList3.clear();
+                    exList4.clear();
 
                     for (DataSnapshot data : dS.getChildren()) {
                         expensesC exp2 = data.getValue(expensesC.class);
@@ -220,9 +231,11 @@ public class Expenses extends AppCompatActivity {
                         str1 = exp2.getEtype();
                         str2 = exp2.getEdate();
                         str3 = exp2.getEprice();
+                        str4 = exp2.getEmonth();
                         exList.add(str1 + "");
                         exList2.add(str2+ "");
                         exList3.add(str3);
+                        exList4.add(str4);
                     }
                 }
 
@@ -231,11 +244,14 @@ public class Expenses extends AppCompatActivity {
                 }
             });
         }
+
         Data.setLength(0);
         Data.append("סכום ,תאריך, ");
         for (int i = 0; i < exList.size(); i++) {
             Data.append("\n" + exList3.get(i) + "," + exList2.get(i) + "," + exList.get(i));
         }
+
+
 
 
         try {
@@ -285,6 +301,8 @@ public class Expenses extends AppCompatActivity {
         }
         if (st.equals("Graphs")){
             Intent si = new Intent(this, Graphs.class);
+            si.putExtra("month", exList4);
+            si.putExtra("price", exList3);
             startActivity(si);
         }
 
