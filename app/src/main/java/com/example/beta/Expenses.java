@@ -40,7 +40,7 @@ import static com.example.beta.FBref.refbus;
 public class Expenses extends AppCompatActivity {
 
     EditText et1, et2, et3;
-    int x = 0, pricei, monthE;
+    int x = 0, pricei, monthE, deuid2;
     TextView tvdate;
     String Euid = " ", Deuid = " ",  uidi = " ", uidi2 = " ";
     Spinner Spinner, Spinner2;

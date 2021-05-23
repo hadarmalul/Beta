@@ -14,17 +14,12 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+
 public class Graphs extends AppCompatActivity {
 
-    EditText firstNum_1, secondNum_1;
-    EditText firstNum_2, secondNum_2;
-    EditText firstNum_3, secondNum_3;
-    EditText firstNum_4, secondNum_4;
-    String firstInput_1 = "0" , secondInput_1 = "0";
-    String firstInput_2  = "0", secondInput_2 = "0";
-    String firstInput_3 = "0", secondInput_3 = "0";
-    String firstInput_4 = "0", secondInput_4 = "0";
-    Expenses ex = new Expenses();
+    ArrayList<Integer> monthlist = new ArrayList<Integer>();
+    ArrayList<Integer> pricelist = new ArrayList<Integer>();
     expensesC expences = new expensesC();
     int sum, sum2, sum3, sum4, sum5, sum6, sum7, sum8, sum9, sum10, sum11, sum12;
 
@@ -33,16 +28,9 @@ public class Graphs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphs);
 
-        firstNum_1 = findViewById(R.id.firstNum_1);
-        secondNum_1 = findViewById(R.id.secondNum_1);
-        firstNum_2 = findViewById(R.id.firstNum_2);
-        secondNum_2 = findViewById(R.id.secondNum_2);
-        firstNum_3 = findViewById(R.id.firstNum_3);
-        secondNum_3 = findViewById(R.id.secondNum_3);
-        firstNum_4 = findViewById(R.id.firstNum_4);
-        secondNum_4 = findViewById(R.id.secondNum_4);
-
-        Intent gi = new Intent();
+        Intent gi = getIntent();
+        monthlist = gi.getIntegerArrayListExtra("month");
+        pricelist = gi.getIntegerArrayListExtra("price");
 
 
 
@@ -53,41 +41,32 @@ public class Graphs extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //  1 and 5
-                firstInput_1 = firstNum_1.getText().toString();
-                secondInput_1 = secondNum_1.getText().toString();
-                firstInput_2 = firstNum_2.getText().toString();
-                secondInput_2 = secondNum_2.getText().toString();
-                firstInput_3 = firstNum_3.getText().toString();
-                secondInput_3 = secondNum_3.getText().toString();
-                firstInput_4 = firstNum_4.getText().toString();
-                secondInput_4 = secondNum_4.getText().toString();
 
-                for(int i=0; i<ex.exList4.size(); i++) {
-                    switch (ex.exList4.get(i)){
-                        case 1: sum = sum + ex.exList3.get(i);
+                for(int i=0; i<monthlist.size(); i++) {
+                    switch (monthlist.get(i)){
+                        case 1: sum = sum + pricelist.get(i);
                         break;
-                        case 2: sum2 = sum2 + ex.exList3.get(i);
+                        case 2: sum2 = sum2 + pricelist.get(i);
                         break;
-                        case 3: sum3 = sum3 + ex.exList3.get(i);
+                        case 3: sum3 = sum3 + pricelist.get(i);
                         break;
-                        case 4: sum4 = sum4 + ex.exList3.get(i);
+                        case 4: sum4 = sum4 + pricelist.get(i);
                         break;
-                        case 5: sum5 = sum5 + ex.exList3.get(i);
+                        case 5: sum5 = sum5 + pricelist.get(i);
                         break;
-                        case 6: sum6 = sum6 + ex.exList3.get(i);
+                        case 6: sum6 = sum6 + pricelist.get(i);
                         break;
-                        case 7: sum7 = sum7 + ex.exList3.get(i);
+                        case 7: sum7 = sum7 + pricelist.get(i);
                         break;
-                        case 8: sum8 = sum8 + ex.exList3.get(i);
+                        case 8: sum8 = sum8 + pricelist.get(i);
                         break;
-                        case 9: sum9 = sum9 + ex.exList3.get(i);
+                        case 9: sum9 = sum9 + pricelist.get(i);
                         break;
-                        case 10: sum10 = sum10 + ex.exList3.get(i);
+                        case 10: sum10 = sum10 + pricelist.get(i);
                         break;
-                        case 11: sum11 = sum11 + ex.exList3.get(i);
+                        case 11: sum11 = sum11 + pricelist.get(i);
                         break;
-                        case 12: sum12 = sum12 + ex.exList3.get(i);
+                        case 12: sum12 = sum12 + pricelist.get(i);
                         break;
 
 
