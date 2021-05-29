@@ -13,6 +13,7 @@ public class FBref {
     public static DatabaseReference refbus = FBDB.getReference("Businesses");
 
     public static DatabaseReference refEX = FBDB.getReference("Expenses");
+    public static DatabaseReference refINC = FBDB.getReference("Incomes");
 
 
 }

@@ -3,8 +3,10 @@ package com.example.beta;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -33,26 +35,33 @@ import java.util.Calendar;
 
 import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
+import static com.example.beta.FBref.refINC;
 
 public class Incomes extends AppCompatActivity {
+
     EditText et1, et2, et3;
-    int x = 0, Ipricei;
+    int x = 0, pricei, monthI, deuid2;
     TextView tvdate;
-    String Euid = " ", Diuid = " ", monthI = " ", Iuidi = " ";
-    Spinner Spinner, Spinner2;
+    String Iuid = " ", DIuid = " ",  uidi = " ", uidi2 = " ";
+    Spinner Spinner;
     private IncomesC inc;
-    ArrayList<String> incList = new ArrayList<String>();
-    ArrayList<String> incList2 = new ArrayList<String>();
-    ArrayList<Integer> incList3 = new ArrayList<Integer>();
+    public ArrayList<String> incList = new ArrayList<String>();
+    public ArrayList<String> incList2 = new ArrayList<String>();
+    public ArrayList<Integer> incList3 = new ArrayList<Integer>();
+    public ArrayList<Integer> incList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
-    String[] spinE2 = {"this month", "last 6 months", "last year"};
     String str1, str2;
-    int str3;
+    int str3, str4;
     StringBuilder Data = new StringBuilder();
+    Calendar cal = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener mDateSetListener;
     private SimpleDateFormat dateFormat;
     private String date;
     private Calendar calendar;
+    AlertDialog.Builder adb;
+    int hour = cal.get(Calendar.HOUR);
+    int minute = cal.get(Calendar.MINUTE);
+    int second = cal.get(Calendar.SECOND);
 
 
     @Override
@@ -64,13 +73,12 @@ public class Incomes extends AppCompatActivity {
         et3 = (EditText) findViewById(R.id.et3);
         tvdate = (TextView) findViewById(R.id.tvdate);
         Spinner = (Spinner) findViewById(R.id.Spinner);
-        Spinner2 = (Spinner) findViewById(R.id.Spinner2);
 
 
         tvdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
+
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -87,24 +95,23 @@ public class Incomes extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month++;
-                Iuidi = dayOfMonth + "/" + month + "/" + year;
+                uidi = dayOfMonth + "/" + month + "/" + year;
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-                tvdate.setText(Iuidi);
-                Diuid = String.valueOf(year) + String.valueOf(month) + String.valueOf(dayOfMonth);
-                monthI = String.valueOf(month);
+                tvdate.setText(uidi);
+                DIuid = String.valueOf(year) + String.valueOf(month) + String.valueOf(dayOfMonth) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
+                uidi2 = String.valueOf(dayOfMonth) + String.valueOf(month) + String.valueOf(year);
+                monthI = month;
             }
         };
 
         FirebaseUser user = mAuth.getCurrentUser();
-        Euid = user.getUid();
+        Iuid = user.getUid();
 
 
         ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE);
         Spinner.setAdapter(adp);
-        ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE2);
-        Spinner2.setAdapter(adp2);
 
-        Query query = refEX.child(Euid).orderByChild("edate");
+        Query query = refINC.child(Iuid).orderByChild("idate");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -112,6 +119,7 @@ public class Incomes extends AppCompatActivity {
                 incList.clear();
                 incList2.clear();
                 incList3.clear();
+                incList4.clear();
 
                 for (DataSnapshot data : dS.getChildren()) {
                     IncomesC inc2 = data.getValue(IncomesC.class);
@@ -119,9 +127,11 @@ public class Incomes extends AppCompatActivity {
                     str1 = inc2.getItype();
                     str2 = inc2.getIdate();
                     str3 = inc2.getIprice();
+                    str4 = inc2.getImonth();
                     incList.add(str1 + "");
                     incList2.add(str2 + "");
                     incList3.add(str3);
+                    incList4.add(str4);
                 }
             }
 
@@ -131,21 +141,19 @@ public class Incomes extends AppCompatActivity {
         });
     }
 
-
-    public void csve(View view) {
-
+    public void csvi(View view) {
 
         String sug = et1.getText().toString();
         String price = et3.getText().toString();
-        Ipricei = Integer.parseInt(price);
+        pricei = Integer.parseInt(price);
 
 
-        inc = new IncomesC(sug, Iuidi, Ipricei, monthI, Euid);
-        refEX.child(Euid).child(Diuid).setValue(inc);
+        inc = new IncomesC(sug,uidi, pricei, monthI, Iuid);
+        refINC.child(Iuid).child(DIuid).setValue(inc);
 
 
         if (Spinner.getSelectedItemPosition() == 0) {
-            Query query = refEX.child(Euid).orderByChild(Diuid);
+            Query query = refINC.child(Iuid).orderByChild(DIuid);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -153,6 +161,7 @@ public class Incomes extends AppCompatActivity {
                     incList.clear();
                     incList2.clear();
                     incList3.clear();
+                    incList4.clear();
 
                     for (DataSnapshot data : dS.getChildren()) {
                         IncomesC inc2 = data.getValue(IncomesC.class);
@@ -160,9 +169,11 @@ public class Incomes extends AppCompatActivity {
                         str1 = inc2.getItype();
                         str2 = inc2.getIdate();
                         str3 = inc2.getIprice();
+                        str4 = inc2.getImonth();
                         incList.add(str1 + "");
-                        incList2.add(str2 + "");
+                        incList2.add(str2+ "");
                         incList3.add(str3);
+                        incList4.add(str4);
                     }
                 }
 
@@ -173,7 +184,7 @@ public class Incomes extends AppCompatActivity {
         }
 
         if (Spinner.getSelectedItemPosition() == 1) {
-            Query query = refEX.child(Euid).orderByChild("etype");
+            Query query = refINC.child(Iuid).orderByChild("itype");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -181,6 +192,7 @@ public class Incomes extends AppCompatActivity {
                     incList.clear();
                     incList2.clear();
                     incList3.clear();
+                    incList4.clear();
 
                     for (DataSnapshot data : dS.getChildren()) {
                         IncomesC inc2 = data.getValue(IncomesC.class);
@@ -188,9 +200,11 @@ public class Incomes extends AppCompatActivity {
                         str1 = inc2.getItype();
                         str2 = inc2.getIdate();
                         str3 = inc2.getIprice();
+                        str4 = inc2.getImonth();
                         incList.add(str1 + "");
-                        incList2.add(str2 + "");
+                        incList2.add(str2+ "");
                         incList3.add(str3);
+                        incList4.add(str4);
                     }
                 }
 
@@ -201,7 +215,7 @@ public class Incomes extends AppCompatActivity {
         }
 
         if (Spinner.getSelectedItemPosition() == 2) {
-            Query query = refEX.child(Euid).orderByChild("eprice");
+            Query query = refINC.child(Iuid).orderByChild("iprice");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -209,6 +223,7 @@ public class Incomes extends AppCompatActivity {
                     incList.clear();
                     incList2.clear();
                     incList3.clear();
+                    incList4.clear();
 
                     for (DataSnapshot data : dS.getChildren()) {
                         IncomesC inc2 = data.getValue(IncomesC.class);
@@ -216,9 +231,11 @@ public class Incomes extends AppCompatActivity {
                         str1 = inc2.getItype();
                         str2 = inc2.getIdate();
                         str3 = inc2.getIprice();
+                        str4 = inc2.getImonth();
                         incList.add(str1 + "");
-                        incList2.add(str2 + "");
+                        incList2.add(str2+ "");
                         incList3.add(str3);
+                        incList4.add(str4);
                     }
                 }
 
@@ -228,41 +245,59 @@ public class Incomes extends AppCompatActivity {
             });
         }
 
-        Data.setLength(0);
-        Data.append("סכום ,תאריך, ");
-        for (int i = 0; i < incList.size(); i++) {
-            Data.append("\n" + incList3.get(i) + "," + incList2.get(i) + "," + incList.get(i));
-        }
+        adb = new AlertDialog.Builder(this);
+        adb.setTitle("upload a table?");
+        adb.setMessage("do you want to upload the table right now?");
+        adb.setPositiveButton("UPLOAD", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Data.setLength(0);
+                Data.append("סכום ,תאריך, ");
+                for (int k = 0; k < incList.size(); k++) {
+                    Data.append("\n" + incList3.get(k) + "," + incList2.get(k) + "," + incList.get(k));
+                }
 
 
-        try {
-            String name ="data";
-            calendar = Calendar.getInstance();
-            dateFormat = new SimpleDateFormat("yyMMddHHmmss");
-            date = dateFormat.format(calendar.getTime());
-            name += date;
-            name += ".csv";
-            FileOutputStream out = openFileOutput(name, Context.MODE_PRIVATE);
-            out.write((Data.toString()).getBytes());
-            out.close();
+                try {
+                    String name ="data";
+                    calendar = Calendar.getInstance();
+                    dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+                    date = dateFormat.format(calendar.getTime());
+                    name += date;
+                    name += ".csv";
+                    FileOutputStream out = openFileOutput((name), Context.MODE_PRIVATE);
+                    out.write((Data.toString()).getBytes());
+                    out.close();
 
-            Context context = getApplicationContext();
-            File filelocation = new File(getFilesDir(), name);
-            Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
-            Intent fileIntent = new Intent(Intent.ACTION_SEND);
-            fileIntent.setType("text/csv");
-            fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
-            fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            fileIntent.putExtra(Intent.EXTRA_STREAM, path);
-            startActivity(Intent.createChooser(fileIntent, "send mail"));
+                    Context context = getApplicationContext();
+                    File filelocation = new File(getFilesDir(), name);
+                    Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
+                    Intent fileIntent = new Intent(Intent.ACTION_SEND);
+                    fileIntent.setType("text/csv");
+                    fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
+                    fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+                    startActivity(Intent.createChooser(fileIntent, "send mail"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
 
-        }
+                }
+            }
+        });
+
+        adb.setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+            }
+        });
+
+        AlertDialog ad = adb.create();
+        ad.show();
     }
-
-
 
     public boolean onCreateOptionsMenu (Menu menu) {
 
@@ -287,4 +322,5 @@ public class Incomes extends AppCompatActivity {
 
         return true;
     }
+
 }

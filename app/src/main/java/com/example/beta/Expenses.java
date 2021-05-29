@@ -3,8 +3,10 @@ package com.example.beta;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -43,21 +45,25 @@ public class Expenses extends AppCompatActivity {
     int x = 0, pricei, monthE, deuid2;
     TextView tvdate;
     String Euid = " ", Deuid = " ",  uidi = " ", uidi2 = " ";
-    Spinner Spinner, Spinner2;
+    Spinner Spinner;
     private expensesC exp;
     public ArrayList<String> exList = new ArrayList<String>();
     public ArrayList<String> exList2 = new ArrayList<String>();
     public ArrayList<Integer> exList3 = new ArrayList<Integer>();
     public ArrayList<Integer> exList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
-    String[] spinE2 = {"this month", "last 6 months", "last year"};
     String str1, str2;
     int str3, str4;
     StringBuilder Data = new StringBuilder();
+    Calendar cal = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener mDateSetListener;
     private SimpleDateFormat dateFormat;
     private String date;
     private Calendar calendar;
+    AlertDialog.Builder adb;
+    int hour = cal.get(Calendar.HOUR);
+    int minute = cal.get(Calendar.MINUTE);
+    int second = cal.get(Calendar.SECOND);
 
 
     @Override
@@ -69,13 +75,12 @@ public class Expenses extends AppCompatActivity {
         et3 = (EditText) findViewById(R.id.et3);
         tvdate = (TextView) findViewById(R.id.tvdate);
         Spinner = (Spinner) findViewById(R.id.Spinner);
-        Spinner2 = (Spinner) findViewById(R.id.Spinner2);
 
 
         tvdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
+
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -95,7 +100,7 @@ public class Expenses extends AppCompatActivity {
                 uidi = dayOfMonth + "/" + month + "/" + year;
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
                 tvdate.setText(uidi);
-                Deuid = String.valueOf(year) + String.valueOf(month) + String.valueOf(dayOfMonth);
+                Deuid = String.valueOf(year) + String.valueOf(month) + String.valueOf(dayOfMonth) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
                 uidi2 = String.valueOf(dayOfMonth) + String.valueOf(month) + String.valueOf(year);
                 monthE = month;
             }
@@ -107,8 +112,6 @@ public class Expenses extends AppCompatActivity {
 
         ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE);
         Spinner.setAdapter(adp);
-        ArrayAdapter<String> adp2 = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spinE2);
-        Spinner2.setAdapter(adp2);
 
         Query query = refEX.child(Euid).orderByChild("edate");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -245,40 +248,58 @@ public class Expenses extends AppCompatActivity {
             });
         }
 
-        Data.setLength(0);
-        Data.append("סכום ,תאריך, ");
-        for (int i = 0; i < exList.size(); i++) {
-            Data.append("\n" + exList3.get(i) + "," + exList2.get(i) + "," + exList.get(i));
-        }
+        adb = new AlertDialog.Builder(this);
+        adb.setTitle("upload a table?");
+        adb.setMessage("do you want to upload the table right now?");
+        adb.setPositiveButton("UPLOAD", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Data.setLength(0);
+                Data.append("סכום ,תאריך, ");
+                for (int k = 0; k < exList.size(); k++) {
+                    Data.append("\n" + exList3.get(k) + "," + exList2.get(k) + "," + exList.get(k));
+                }
 
 
+                try {
+                    String name ="data";
+                    calendar = Calendar.getInstance();
+                    dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+                    date = dateFormat.format(calendar.getTime());
+                    name += date;
+                    name += ".csv";
+                    FileOutputStream out = openFileOutput((name), Context.MODE_PRIVATE);
+                    out.write((Data.toString()).getBytes());
+                    out.close();
 
+                    Context context = getApplicationContext();
+                    File filelocation = new File(getFilesDir(), name);
+                    Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
+                    Intent fileIntent = new Intent(Intent.ACTION_SEND);
+                    fileIntent.setType("text/csv");
+                    fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
+                    fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+                    startActivity(Intent.createChooser(fileIntent, "send mail"));
 
-        try {
-            String name ="data";
-            calendar = Calendar.getInstance();
-            dateFormat = new SimpleDateFormat("yyMMddHHmmss");
-            date = dateFormat.format(calendar.getTime());
-            name += date;
-            name += ".csv";
-            FileOutputStream out = openFileOutput(name, Context.MODE_PRIVATE);
-            out.write((Data.toString()).getBytes());
-            out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
 
-            Context context = getApplicationContext();
-            File filelocation = new File(getFilesDir(), name);
-            Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
-            Intent fileIntent = new Intent(Intent.ACTION_SEND);
-            fileIntent.setType("text/csv");
-            fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
-            fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            fileIntent.putExtra(Intent.EXTRA_STREAM, path);
-            startActivity(Intent.createChooser(fileIntent, "send mail"));
+                }
+            }
+        });
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        adb.setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
-        }
+                dialogInterface.cancel();
+            }
+        });
+
+        AlertDialog ad = adb.create();
+        ad.show();
     }
 
 
@@ -301,8 +322,6 @@ public class Expenses extends AppCompatActivity {
         }
         if (st.equals("Graphs")){
             Intent si = new Intent(this, Graphs.class);
-            si.putExtra("month", exList4);
-            si.putExtra("price", exList3);
             startActivity(si);
         }
 

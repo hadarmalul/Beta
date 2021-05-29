@@ -7,17 +7,33 @@
     android:layout_height = "match_parent"
     tools:context=".Graphs">
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="60dip" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dip"
+        android:layout_above="@+id/addButton"
+        android:layout_below="@+id/graph2"
+        android:layout_marginTop="71dp"
+        android:layout_marginBottom="71dp" />
+
     <com.jjoe64.graphview.GraphView
-        android:layout_width = "match_parent"
-        android:layout_height = "200dip"
-        android:id = "@+id/graph" />
+        android:id="@+id/graph2"
+        android:layout_width="match_parent"
+        android:layout_height="300dip"
+        android:layout_alignTop="@+id/addButton"
+        android:layout_marginTop="-325dp" />
 
     <Button
-        android:id = "@+id/addButton"
-        android:layout_width = "wrap_content"
-        android:layout_height = "wrap_content"
-        android:layout_alignParentBottom = "true"
-        android:layout_centerHorizontal = "true"
-        android:layout_marginBottom = "17dp"
-        android:text = "upload" />
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:onClick="graphh"
+        android:text="upload" />
 </RelativeLayout>

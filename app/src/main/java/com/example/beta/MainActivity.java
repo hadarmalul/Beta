@@ -27,54 +27,56 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 import static com.example.beta.FBref.mAuth;
-import static com.example.beta.FBref.refbus;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    TextView tvBTitle, tvBRegister;
-    String nameU = "", uidU = "", mailU = "", passU = "";
-    EditText etBmail, etBpass, etname;
-    // private FirebaseAuth mAuth;
-    Boolean stayConnect, registered; //isUID=false,mVerificationProgress=false;
-    Button btnB;
-    UserC userBdb;
+    TextView tVtitle, tVregister;
+    EditText eTname, eTdesc, eTemail, eTpass;
     CheckBox cBstayconnect;
+    Button btn;
+
+    String name, desc, email, password, uid;
+    UserC userdb;
+    Boolean stayConnect, registered, firstrun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etBmail = (EditText) findViewById(R.id.Bmail);
-        etname = (EditText) findViewById(R.id.etname);
-        etBpass = (EditText) findViewById(R.id.Bpass);
-        btnB = (Button) findViewById(R.id.btnB);
-        tvBRegister = (TextView) findViewById(R.id.tvRegister);
-        tvBTitle = (TextView) findViewById(R.id.tvTitle);
-        cBstayconnect = (CheckBox) findViewById(R.id.cBstayconnect);
-        stayConnect = false;
-        registered = true;
-        regOption();
+        tVtitle=(TextView) findViewById(R.id.tVtitle);
+        eTname=(EditText)findViewById(R.id.eTname);
+        eTemail=(EditText)findViewById(R.id.eTemail);
+        eTpass=(EditText)findViewById(R.id.eTpass);
+        eTdesc =(EditText)findViewById(R.id.eTdesc);
+        cBstayconnect=(CheckBox)findViewById(R.id.cBstayconnect);
+        tVregister=(TextView) findViewById(R.id.tVregister);
+        btn=(Button)findViewById(R.id.btn);
 
+        stayConnect=false;
+        registered=true;
+
+        regoption();
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences settings = getSharedPreferences("PREFS_NAME", MODE_PRIVATE);
-        Boolean isChecked = settings.getBoolean("stayConnect", false);
-        Intent si = new Intent(MainActivity.this, PersonalArea.class);
-        if ((mAuth.getCurrentUser() != null) && (isChecked)) {
-            stayConnect = true;
-            si.putExtra("UserB", false);
+        SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+        Boolean isChecked=settings.getBoolean("stayConnect",false);
+        Intent si = new Intent(MainActivity.this,PersonalArea.class);
+        if (mAuth.getCurrentUser()!=null && isChecked) {
+            stayConnect=true;
+            si.putExtra("newuser",false);
             startActivity(si);
         }
     }
 
     /**
      * On activity pause - If logged in & asked to be remembered - kill activity.
+     * <p>
      */
     @Override
     protected void onPause() {
@@ -82,125 +84,112 @@ public class MainActivity extends AppCompatActivity {
         if (stayConnect) finish();
     }
 
+    private void regoption() {
+        SpannableString ss = new SpannableString("Don't have an account?  Register here!");
+        ClickableSpan span = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                tVtitle.setText("Register");
+                eTname.setVisibility(View.VISIBLE);
+                eTdesc.setVisibility(View.VISIBLE);
+                btn.setText("Register");
+                registered=false;
+                logoption();
+            }
+        };
+        ss.setSpan(span, 24, 38, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tVregister.setText(ss);
+        tVregister.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void logoption() {
+        SpannableString ss = new SpannableString("Already have an account?  Login here!");
+        ClickableSpan span = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                tVtitle.setText("Login");
+                eTname.setVisibility(View.INVISIBLE);
+                eTdesc.setVisibility(View.INVISIBLE);
+                btn.setText("Login");
+                registered=true;
+                regoption();
+            }
+        };
+        ss.setSpan(span, 26, 37, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tVregister.setText(ss);
+        tVregister.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
     /**
-     * this function is called when the user is in the login option but he needs to register
-     * OR
-     * when the application is running for the first time in the user's device
-     * the function "changes" the screen for the register option.
+     * Logging in or Registering to the application
+     * Using:   Firebase Auth with email & password
+     *          Firebase Realtime database with the object User to the branch Users
+     * If login or register process is Ok saving stay connect status & pass to next activity
+     * <p>
      */
-    private void regOption() {
-        SpannableString ss = new SpannableString("Don't Have an Account? Register Here!");
-        ClickableSpan span = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View widget) {
-                tvBTitle.setText("Register");
-                etBmail.setVisibility(View.VISIBLE);
-                etBpass.setVisibility(View.VISIBLE);
-                etname.setVisibility(View.VISIBLE);
-                btnB.setText("Register");
-                registered = false;
-                logOption();
-            }
-        };
-        ss.setSpan(span, 24, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tvBRegister.setText(ss);
-        tvBRegister.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+    public void logorreg(View view) {
+        if (registered) {
+            email=eTemail.getText().toString();
+            password=eTpass.getText().toString();
 
-    private void logOption() {
-        SpannableString ss = new SpannableString("Already Have an Account? Login Here!");
-        ClickableSpan span = new ClickableSpan() {
-            @Override
-            public void onClick(@NonNull View widget) {
-                tvBTitle.setText("Login");
-                etBmail.setVisibility(View.INVISIBLE);
-                etBpass.setVisibility(View.VISIBLE);
-                btnB.setText("Login");
-                registered = true;
-                regOption();
-            }
-        };
-        ss.setSpan(span, 26, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tvBRegister.setText(ss);
-        tvBRegister.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-
-    public void logOrReg(View view) {
-        mailU = etBmail.getText().toString();
-        passU = etBpass.getText().toString();
-
-        if (mailU.isEmpty() || passU.isEmpty())
-            Toast.makeText(this, "please fill all the necessary fields", Toast.LENGTH_SHORT).show();
-        else {
-            if ((!mailU.contains("@") || !mailU.endsWith(".il")) && (!mailU.endsWith(".com") || !mailU.contains("@"))) {
-                etBmail.setError("Mail is Invalid!");
-            }
-            if (passU.length() < 6) {
-                etBpass.setError("Password Needs To Be At Least 6 Characters!");
-            } else {
-                if (registered) {
-                    mailU = etBmail.getText().toString();
-                    passU = etBpass.getText().toString();
-
-                    final ProgressDialog pd = ProgressDialog.show(this, "Login", "Connecting...", true);
-                    mAuth.signInWithEmailAndPassword(mailU, passU).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            final ProgressDialog pd=ProgressDialog.show(this,"Login","Connecting...",true);
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             pd.dismiss();
                             if (task.isSuccessful()) {
-                                SharedPreferences settings = getSharedPreferences("PREFS_NAME", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("stayConnect", cBstayconnect.isChecked());
+                                SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+                                SharedPreferences.Editor editor=settings.edit();
+                                editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                 editor.commit();
-                                Log.d("BRegistr", "signinUserWithEmail:success");
+                                Log.d("MainActivity", "signinUserWithEmail:success");
                                 Toast.makeText(MainActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                                Intent si = new Intent(MainActivity.this, PersonalArea.class);
-                                si.putExtra("UserB", false);
+                                Intent si = new Intent(MainActivity.this,PersonalArea.class);
+                                si.putExtra("newuser",false);
                                 startActivity(si);
                             } else {
-                                Log.d("BRegistr", "signinUserWithEmail:fail");
-                                Toast.makeText(MainActivity.this, "email or password are wrong!", Toast.LENGTH_LONG).show();
+                                Log.d("MainActivity", "signinUserWithEmail:fail");
+                                Toast.makeText(MainActivity.this, "e-mail or password are wrong!", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                } else {
-                    mailU = etBmail.getText().toString();
-                    passU = etBpass.getText().toString();
-                    nameU = etname.getText().toString();
-                    final ProgressDialog pd = ProgressDialog.show(this, "Register", "Registering...", true);
-                    mAuth.createUserWithEmailAndPassword(mailU, passU).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        } else {
+            name=eTname.getText().toString();
+            desc = eTdesc.getText().toString();
+            email=eTemail.getText().toString();
+            password=eTpass.getText().toString();
+
+            final ProgressDialog pd=ProgressDialog.show(this,"Register","Registering...",true);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             pd.dismiss();
                             if (task.isSuccessful()) {
-                                SharedPreferences settings = getSharedPreferences("PREF_NAME", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("stayConnect", cBstayconnect.isChecked());
+                                SharedPreferences settings=getSharedPreferences("PREFS_NAME",MODE_PRIVATE);
+                                SharedPreferences.Editor editor=settings.edit();
+                                editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                 editor.commit();
-                                Log.d("BRegistr", "createUserWithEmail:success");
-                                /*FirebaseUser UserB = mAuth.getCurrentUser();
-                                uidU = UserB.getUid();
-                                userBdb = new UserC(nameU, passU, mailU, "", "");
-                                refbus.child(uidU).setValue(userBdb);**/
-                                Toast.makeText(MainActivity.this, "Successful Registration", Toast.LENGTH_SHORT).show();
-                                Intent si = new Intent(MainActivity.this, PersonalArea.class);
+                                Log.d("MainActivity", "createUserWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                uid = user.getUid();
+                                userdb=new UserC(name, " ",email," ",uid);
+                                Toast.makeText(MainActivity.this, "Successful registration", Toast.LENGTH_SHORT).show();
+                                Intent si = new Intent(MainActivity.this,PersonalArea.class);
+                                si.putExtra("newuser",true);
                                 startActivity(si);
-                                finish();
                             } else {
                                 if (task.getException() instanceof FirebaseAuthUserCollisionException)
-                                    Toast.makeText(MainActivity.this, "User With Email Alreasy Exist!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "User with e-mail already exist!", Toast.LENGTH_SHORT).show();
                                 else {
-                                    Log.w("BRegistr", "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(MainActivity.this, "User Creat Failed", Toast.LENGTH_LONG).show();
+                                    Log.w("MainActivity", "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(MainActivity.this, "User create failed.",Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
                     });
-                }
-            }
         }
     }
-
 }
 

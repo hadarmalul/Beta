@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 public class IncomesC implements Serializable {
 
-    private String Itype, Idate, Imonth, Iuid;
-    private int  Iprice;
+    private String Itype, Idate, Iuid;
+    private int  Iprice, Imonth;
 
     public IncomesC() {
 
     }
 
-    public IncomesC(String Itype, String Idate, int Iprice, String Imonth, String Iuid) {
+    public IncomesC(String Itype, String Idate, int Iprice, int Imonth, String Iuid) {
 
         this.Itype = Itype;
         this.Idate = Idate;
@@ -53,11 +53,11 @@ public class IncomesC implements Serializable {
         Iprice = iprice;
     }
 
-    public String getImonth() {
+    public int getImonth() {
         return Imonth;
     }
 
-    public void setImonth(String Imonth) {
+    public void setImonth(int Imonth) {
         this.Imonth = Imonth;
     }
 }
