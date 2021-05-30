@@ -80,6 +80,7 @@ public class PersonalArea extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
             imguri=data.getData();
+            imageButton.setImageResource(android.R.color.transparent);
             imageButton.setImageURI(imguri);
         }
     }
@@ -96,6 +97,17 @@ public class PersonalArea extends AppCompatActivity {
 
     public void ex(View view) {
         Intent ssi = new Intent(PersonalArea.this,Expenses.class);
+        startActivity(ssi);
+    }
+
+    public void inc(View view) {
+
+        Intent ssi = new Intent(PersonalArea.this,Incomes.class);
+        startActivity(ssi);
+    }
+
+    public void stat(View view) {
+        Intent ssi = new Intent(PersonalArea.this,Graphs.class);
         startActivity(ssi);
     }
 }

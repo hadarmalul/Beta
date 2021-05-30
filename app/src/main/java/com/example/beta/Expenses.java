@@ -312,6 +312,10 @@ public class Expenses extends AppCompatActivity {
 
     public boolean onOptionsItemSelected (MenuItem item){
         String st = item.getTitle().toString();
+        if (st.equals("Personal Area")) {
+            Intent si = new Intent(this, PersonalArea.class);
+            startActivity(si);
+        }
         if (st.equals("Expenses")) {
             Intent si = new Intent(this, Expenses.class);
             startActivity(si);

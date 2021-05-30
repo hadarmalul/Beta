@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -75,7 +77,7 @@ public class Graphs extends AppCompatActivity {
 
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph2);
-        staticLabelsFormatter.setHorizontalLabels(new String[] {month0, month1, month2, month3, month4, month5});
+        staticLabelsFormatter.setHorizontalLabels(new String[]{month0, month1, month2, month3, month4, month5});
         graph2.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
     }
@@ -84,7 +86,7 @@ public class Graphs extends AppCompatActivity {
 
         graph2.removeSeries(series2);
 
-        if(spinner.getSelectedItemPosition()==0) {
+        if (spinner.getSelectedItemPosition() == 0) {
 
             Query query = refEX.child(uid).orderByChild("edate");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -111,7 +113,7 @@ public class Graphs extends AppCompatActivity {
 
             graph2.setTitle("Expenses");
         }
-        if(spinner.getSelectedItemPosition()==1){
+        if (spinner.getSelectedItemPosition() == 1) {
 
             Query query = refINC.child(uid).orderByChild("idate");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -140,45 +142,45 @@ public class Graphs extends AppCompatActivity {
         }
 
         int month00 = cal2.get(Calendar.MONTH);
-        int month11 = (((month00-1)+12)%12);
-        int month22 = (((month00-2)+12)%12);
-        int month33 = (((month00-3)+12)%12);
-        int month44 = (((month00-4)+12)%12);
-        int month55 = (((month00-5)+12)%12);
+        int month11 = (((month00 - 1) + 12) % 12);
+        int month22 = (((month00 - 2) + 12) % 12);
+        int month33 = (((month00 - 3) + 12) % 12);
+        int month44 = (((month00 - 4) + 12) % 12);
+        int month55 = (((month00 - 5) + 12) % 12);
 
-        if(month11 == 0){
+        if (month11 == 0) {
             month11 = month11 + 12;
         }
-        if(month22 == 0){
+        if (month22 == 0) {
             month22 = month22 + 12;
         }
-        if(month33 == 0){
+        if (month33 == 0) {
             month33 = month33 + 12;
         }
-        if(month44 == 0){
+        if (month44 == 0) {
             month44 = month44 + 12;
         }
-        if(month55 == 0){
+        if (month55 == 0) {
             month55 = month55 + 12;
         }
 
         for (int i = 0; i < monthlist.size(); i++) {
-            if(monthlist.get(i) == (month00+1)){
+            if (monthlist.get(i) == (month00 + 1)) {
                 sum = sum + pricelist.get(i);
             }
-            if(monthlist.get(i) == (month11+1)){
+            if (monthlist.get(i) == (month11 + 1)) {
                 sum2 = sum2 + pricelist.get(i);
             }
-            if(monthlist.get(i) == (month22+1)){
+            if (monthlist.get(i) == (month22 + 1)) {
                 sum3 = sum3 + pricelist.get(i);
             }
-            if(monthlist.get(i) == (month33+1)){
+            if (monthlist.get(i) == (month33 + 1)) {
                 sum4 = sum4 + pricelist.get(i);
             }
-            if(monthlist.get(i) == (month44+1)){
+            if (monthlist.get(i) == (month44 + 1)) {
                 sum5 = sum5 + pricelist.get(i);
             }
-            if(monthlist.get(i) == (month55+1)){
+            if (monthlist.get(i) == (month55 + 1)) {
                 sum6 = sum6 + pricelist.get(i);
             }
         }
@@ -186,23 +188,51 @@ public class Graphs extends AppCompatActivity {
         try {
             series2 = new BarGraphSeries<>(new DataPoint[]{
 
-                new DataPoint(0, sum),
-                new DataPoint(2, sum2),
-                new DataPoint(4, sum3),
-                new DataPoint(6, sum4),
-                new DataPoint(8, sum5),
-                new DataPoint(10, sum6),
+                    new DataPoint(0, sum),
+                    new DataPoint(2, sum2),
+                    new DataPoint(4, sum3),
+                    new DataPoint(6, sum4),
+                    new DataPoint(8, sum5),
+                    new DataPoint(10, sum6),
 
-        });
+            });
             graph2.addSeries(series2);
             series2.setDrawValuesOnTop(true);
             series2.setSpacing(20);
         } catch (IllegalArgumentException e) {
-        Toast.makeText(Graphs.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(Graphs.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String st = item.getTitle().toString();
+        if (st.equals("Personal Area")) {
+            Intent si = new Intent(this, PersonalArea.class);
+            startActivity(si);
+        }
+        if (st.equals("Expenses")) {
+            Intent si = new Intent(this, Expenses.class);
+            startActivity(si);
+        }
+        if (st.equals("Incomes")) {
+            Intent si = new Intent(this, Incomes.class);
+            startActivity(si);
+        }
+        if (st.equals("Graphs")) {
+            Intent si = new Intent(this, Graphs.class);
+            startActivity(si);
+        }
+
+        return true;
+
+    }
 }
 
 

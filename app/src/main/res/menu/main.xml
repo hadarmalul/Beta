@@ -2,6 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:title="Personal Area" />
+    <item
         android:title="Expenses" />
     <item
         android:title="Incomes" />
