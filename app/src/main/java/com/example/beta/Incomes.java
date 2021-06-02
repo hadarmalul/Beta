@@ -37,12 +37,16 @@ import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
 import static com.example.beta.FBref.refINC;
 
+/**
+ * The type Incomes.
+ */
 public class Incomes extends AppCompatActivity {
+
 
     EditText et1, et2, et3;
     int x = 0, pricei, monthI, deuid2;
     TextView tvdate;
-    String Iuid = " ", DIuid = " ",  uidi = " ", uidi2 = " ";
+    String Iuid = " ", DIuid = " ", uidi = " ", uidi2 = " ";
     Spinner Spinner;
     private IncomesC inc;
     public ArrayList<String> incList = new ArrayList<String>();
@@ -74,6 +78,9 @@ public class Incomes extends AppCompatActivity {
         tvdate = (TextView) findViewById(R.id.tvdate);
         Spinner = (Spinner) findViewById(R.id.Spinner);
 
+        /**
+         * הפעולה יוצרת את הבוחר זמן
+         */
 
         tvdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +148,12 @@ public class Incomes extends AppCompatActivity {
         });
     }
 
+    /**
+     * Csvi.
+     * כאשר הכפתור נלחץ הנתונים המשתמש כתב מועברים לfurebase
+     * הנתונים שיש בבסי הנתונים נקראים וממוינים לפי מה שהמשתמש בחר ברשימה
+     * @param view the view
+     */
     public void csvi(View view) {
 
         String sug = et1.getText().toString();
@@ -245,6 +258,11 @@ public class Incomes extends AppCompatActivity {
             });
         }
 
+        /**
+         * תיבת דו שיח שכאשר המשתמש לוחץ כל לא עכשיו לא קורה כלום
+         * כאשר המשתמש לוחץ על העלאה נוצרת טבלת csv והיא נשלחת אליו
+         */
+
         adb = new AlertDialog.Builder(this);
         adb.setTitle("upload a table?");
         adb.setMessage("do you want to upload the table right now?");
@@ -298,6 +316,12 @@ public class Incomes extends AppCompatActivity {
         AlertDialog ad = adb.create();
         ad.show();
     }
+
+    /**
+     * הפעולה יוצרת תפריט ןכאשר כפתור בתפריט נלחץ המסך עובר למסך אחר בהתאמה לשם של הכפתור
+     * @param menu
+     * @return
+     */
 
     public boolean onCreateOptionsMenu (Menu menu) {
 

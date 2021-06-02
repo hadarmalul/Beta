@@ -9,4 +9,6 @@
         android:title="Incomes" />
     <item
         android:title="Graphs" />
+    <item
+        android:title="Credits" />
 </menu>

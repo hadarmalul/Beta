@@ -37,7 +37,9 @@ import java.util.Date;
 
 import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
-import static com.example.beta.FBref.refbus;
+/**
+ * The type Expences.
+ */
 
 public class Expenses extends AppCompatActivity {
 
@@ -75,6 +77,10 @@ public class Expenses extends AppCompatActivity {
         et3 = (EditText) findViewById(R.id.et3);
         tvdate = (TextView) findViewById(R.id.tvdate);
         Spinner = (Spinner) findViewById(R.id.Spinner);
+
+        /**
+         * הפעולה יוצרת את הבוחר זמן
+         */
 
 
         tvdate.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +149,12 @@ public class Expenses extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Csve.
+     * כאשר הכפתור נלחץ הנתונים המשתמש כתב מועברים לfurebase
+     * הנתונים שיש בבסי הנתונים נקראים וממוינים לפי מה שהמשתמש בחר ברשימה
+     * @param view the view
+     */
     public void csve(View view) {
 
 
@@ -248,6 +259,12 @@ public class Expenses extends AppCompatActivity {
             });
         }
 
+        /**
+         * תיבת דו שיח שכאשר המשתמש לוחץ כל לא עכשיו לא קורה כלום
+         * כאשר המשתמש לוחץ על העלאה נוצרת טבלת csv והיא נשלחת אליו
+         */
+
+
         adb = new AlertDialog.Builder(this);
         adb.setTitle("upload a table?");
         adb.setMessage("do you want to upload the table right now?");
@@ -303,7 +320,11 @@ public class Expenses extends AppCompatActivity {
     }
 
 
-
+    /**
+     * הפעולה יוצרת תפריט ןכאשר כפתור בתפריט נלחץ המסך עובר למסך אחר בהתאמה לשם של הכפתור
+     * @param menu
+     * @return
+     */
     public boolean onCreateOptionsMenu (Menu menu) {
 
         getMenuInflater().inflate(R.menu.main,menu);
@@ -328,6 +349,11 @@ public class Expenses extends AppCompatActivity {
             Intent si = new Intent(this, Graphs.class);
             startActivity(si);
         }
+        if (st.equals("Credits")){
+            Intent si = new Intent(this, Credits.class);
+            startActivity(si);
+        }
+
 
         return true;
     }

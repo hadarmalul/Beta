@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,7 +20,6 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +29,9 @@ import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
 import static com.example.beta.FBref.refINC;
 
+/**
+ * The type Graphs.
+ */
 public class Graphs extends AppCompatActivity {
 
     ArrayList<Integer> monthlist = new ArrayList<Integer>();
@@ -44,7 +44,7 @@ public class Graphs extends AppCompatActivity {
     GraphView graph2;
     Calendar cal = Calendar.getInstance();
     Calendar cal2 = Calendar.getInstance();
-    BarGraphSeries<DataPoint> series2;
+    BarGraphSeries<DataPoint> series;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,9 @@ public class Graphs extends AppCompatActivity {
 
         graph2 = (GraphView) findViewById(R.id.graph2);
 
+        /**
+         * שם במשתנים את שמות החודשים בחצי השנה האחרונה
+         */
         cal.add(Calendar.MONTH, 0);
         String month0 = new SimpleDateFormat("MMM").format(cal.getTime());
         cal.add(Calendar.MONTH, -1);
@@ -75,6 +78,9 @@ public class Graphs extends AppCompatActivity {
         cal.add(Calendar.MONTH, -1);
         String month5 = new SimpleDateFormat("MMM").format(cal.getTime());
 
+        /**
+         * כותב את החודשים בציר האופקי של הגרף
+         */
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph2);
         staticLabelsFormatter.setHorizontalLabels(new String[]{month0, month1, month2, month3, month4, month5});
@@ -82,9 +88,14 @@ public class Graphs extends AppCompatActivity {
 
     }
 
+    /**
+     * Graphh.
+     *קורא מהfirebase בהתאם למה שנבחר ברשימה
+     * @param view the view
+     */
     public void graphh(View view) {
 
-        graph2.removeSeries(series2);
+        graph2.removeSeries(series);
 
         if (spinner.getSelectedItemPosition() == 0) {
 
@@ -140,6 +151,9 @@ public class Graphs extends AppCompatActivity {
 
             graph2.setTitle("Incomes");
         }
+        /**
+         * שם במשתנים את מספרי החודשים בחצי שנה האחרונה
+         */
 
         int month00 = cal2.get(Calendar.MONTH);
         int month11 = (((month00 - 1) + 12) % 12);
@@ -164,6 +178,10 @@ public class Graphs extends AppCompatActivity {
             month55 = month55 + 12;
         }
 
+        /**
+         * סוכם את סכומי ההוצאות/הכנסות לפי מספרי החודשים בחצי שנה האחרונה
+         */
+
         for (int i = 0; i < monthlist.size(); i++) {
             if (monthlist.get(i) == (month00 + 1)) {
                 sum = sum + pricelist.get(i);
@@ -185,8 +203,12 @@ public class Graphs extends AppCompatActivity {
             }
         }
 
+        /**
+         * מציג את הנתונים על הגרף
+         */
+
         try {
-            series2 = new BarGraphSeries<>(new DataPoint[]{
+            series = new BarGraphSeries<>(new DataPoint[]{
 
                     new DataPoint(0, sum),
                     new DataPoint(2, sum2),
@@ -196,14 +218,21 @@ public class Graphs extends AppCompatActivity {
                     new DataPoint(10, sum6),
 
             });
-            graph2.addSeries(series2);
-            series2.setDrawValuesOnTop(true);
-            series2.setSpacing(20);
+            graph2.addSeries(series);
+            series.setDrawValuesOnTop(true);
+            series.setSpacing(20);
         } catch (IllegalArgumentException e) {
             Toast.makeText(Graphs.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
     }
+
+
+    /**
+     * הפעולה יוצרת תפריט ןכאשר כפתור בתפריט נלחץ המסך עובר למסך אחר בהתאמה לשם של הכפתור
+     * @param menu
+     * @return
+     */
 
     public boolean onCreateOptionsMenu(Menu menu) {
 

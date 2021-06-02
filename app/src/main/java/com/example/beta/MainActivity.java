@@ -27,15 +27,20 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 import static com.example.beta.FBref.mAuth;
+import static com.example.beta.FBref.refEX;
+import static com.example.beta.FBref.refU;
 
+/**
+ * The type Main activity.
+ * @author hadarmalul
+ */
 public class MainActivity extends AppCompatActivity {
 
 
     TextView tVtitle, tVregister;
-    EditText eTname, eTdesc, eTemail, eTpass;
+    EditText eTname,eTdesc, eTemail, eTpass;
     CheckBox cBstayconnect;
     Button btn;
-
     String name, desc, email, password, uid;
     UserC userdb;
     Boolean stayConnect, registered, firstrun;
@@ -57,9 +62,19 @@ public class MainActivity extends AppCompatActivity {
         stayConnect=false;
         registered=true;
 
+        FirebaseUser user = mAuth.getCurrentUser();
+        uid = user.getUid();
+        userdb=new UserC("Hadar", " ","a@gmail.com"," ",uid);
+        refU.child(uid).setValue(userdb);
+
         regoption();
     }
 
+    /**
+     * בודקת אם המשתמש בחר להשאר מחובר לאפליקציה
+     * אם כן, עובר למסך הבא
+     * אם לא, נפתח מסך ההתחברות.
+     */
 
     @Override
     protected void onStart() {
@@ -75,14 +90,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * On activity pause - If logged in & asked to be remembered - kill activity.
-     * <p>
+     * אם המשתמש התחבר וביקש להשאר מחובר הפעולה מורידה את המסך
      */
     @Override
     protected void onPause() {
         super.onPause();
         if (stayConnect) finish();
     }
+
+    /**
+     * הפעולה מופעלת כאשר המשתמש נכנס לראשונה או כאשר הוא צריך להרשם
+     * הפעולה מציגה את כל הפרטים שהמשתמש צריך למלא בהרשמה
+     */
 
     private void regoption() {
         SpannableString ss = new SpannableString("Don't have an account?  Register here!");
@@ -101,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
         tVregister.setText(ss);
         tVregister.setMovementMethod(LinkMovementMethod.getInstance());
     }
+
+    /**
+     * כאשר המשתמש רוצה לעבור ממסך הרשמה להתחברות הפעולה מציגה את המסך
+     * המסך נפתח בכל פתיחה שהיא לא ראשונית
+     */
 
     private void logoption() {
         SpannableString ss = new SpannableString("Already have an account?  Login here!");
@@ -121,11 +145,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Logging in or Registering to the application
-     * Using:   Firebase Auth with email & password
-     *          Firebase Realtime database with the object User to the branch Users
-     * If login or register process is Ok saving stay connect status & pass to next activity
-     * <p>
+     *אם המשתמש במצב התחברות הפעולה תאמת את השם משתמש וסיסמא
+     * אם המשתמש במצב הרשמה הפעולה תבדוק את הנתונים שהוכנסו ובנוסף תעלה אותם אל ה-firebase
+     * @param view the view
      */
     public void logorreg(View view) {
         if (registered) {
@@ -175,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 uid = user.getUid();
                                 userdb=new UserC(name, " ",email," ",uid);
+                                refU.child(uid).setValue(userdb);
                                 Toast.makeText(MainActivity.this, "Successful registration", Toast.LENGTH_SHORT).show();
                                 Intent si = new Intent(MainActivity.this,PersonalArea.class);
                                 si.putExtra("newuser",true);

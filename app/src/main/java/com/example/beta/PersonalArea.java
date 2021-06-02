@@ -23,6 +23,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+/**
+ * The type Personal area.
+ */
 public class PersonalArea extends AppCompatActivity {
 
     ImageButton imageButton;
@@ -54,6 +57,11 @@ public class PersonalArea extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
+    /**
+     * Fileuploader.
+     *מעלה את התמונה לfirebase
+     * @param view the view
+     */
     public void fileuploader(View view) {
 
         StorageReference Ref=mstorageRef.child(System.currentTimeMillis()+"."+getExtension(imguri));
@@ -85,6 +93,11 @@ public class PersonalArea extends AppCompatActivity {
         }
     }
 
+    /**
+     * Filechooser.
+     *עובר לגלריה ונותן למשתמש לבחור תמונה
+     * @param view the view
+     */
     public void filechooser(View view) {
 
         Intent si=new Intent();
@@ -94,18 +107,32 @@ public class PersonalArea extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Ex.
+     *אם הכפתור נלחץ המסך עובר למסך ההוצאות
+     * @param view the view
+     */
     public void ex(View view) {
         Intent ssi = new Intent(PersonalArea.this,Expenses.class);
         startActivity(ssi);
     }
 
+    /**
+     * Inc.
+     *אם הכפתור נלחץ המסך עובר למסך ההכנסות
+     * @param view the view
+     */
     public void inc(View view) {
 
         Intent ssi = new Intent(PersonalArea.this,Incomes.class);
         startActivity(ssi);
     }
 
+    /**
+     * Stat.
+     *אם הכפתור נלחץ המסך עובר למסך הסטטיסטיקה
+     * @param view the view
+     */
     public void stat(View view) {
         Intent ssi = new Intent(PersonalArea.this,Graphs.class);
         startActivity(ssi);
