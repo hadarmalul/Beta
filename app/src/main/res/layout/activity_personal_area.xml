@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="#FFFFFF"
-                android:onClick="fileuploader"
+                android:onClick="filechooser"
                 app:srcCompat="@android:color/white" />
 
             <ImageButton
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_weight="0.5"
-                android:onClick="filechooser"
+                android:onClick="fileuploader"
                 app:srcCompat="@android:drawable/stat_sys_download" />
 
             <Space

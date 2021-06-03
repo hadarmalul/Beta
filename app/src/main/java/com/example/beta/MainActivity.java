@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -29,6 +30,8 @@ import com.google.firebase.auth.FirebaseUser;
 import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
 import static com.example.beta.FBref.refU;
+
+// סטורג אימייל שם מהפיירבייס גרף
 
 /**
  * The type Main activity.
@@ -64,11 +67,35 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
-        userdb=new UserC("Hadar", " ","a@gmail.com"," ",uid);
-        refU.child(uid).setValue(userdb);
 
         regoption();
     }
+
+    protected void sendEmail() {
+
+        Log.i("Send email", "");
+
+        String[] TO = {userdb.getmail()};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Send Email");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Welcome, "+userdb.getname());
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+            Log.i("Finished sending email.", "");
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this,
+                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     /**
      * בודקת אם המשתמש בחר להשאר מחובר לאפליקציה
@@ -194,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                 editor.commit();
                                 Log.d("MainActivity", "createUserWithEmail:success");
+                                sendEmail();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 uid = user.getUid();
                                 userdb=new UserC(name, " ",email," ",uid);

@@ -1,0 +1,282 @@
+@startuml
+
+title __BETA's Class Diagram__\n
+
+  namespace com.example.beta {
+    class com.example.beta.Credits {
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.EuidC {
+        - EuidC : String
+        + EuidC()
+        + EuidC()
+        + getEuidC()
+        + setEuidC()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.Expenses {
+        + exList : ArrayList<String>
+        + exList2 : ArrayList<String>
+        + exList3 : ArrayList<Integer>
+        + exList4 : ArrayList<Integer>
+        ~ Data : StringBuilder
+        ~ Deuid : String
+        ~ Euid : String
+        ~ Spinner : Spinner
+        ~ adb : Builder
+        ~ cal : Calendar
+        ~ deuid2 : int
+        ~ et1 : EditText
+        ~ et2 : EditText
+        ~ et3 : EditText
+        ~ hour : int
+        ~ mDateSetListener : OnDateSetListener
+        ~ minute : int
+        ~ monthE : int
+        ~ pricei : int
+        ~ second : int
+        ~ spinE : String[]
+        ~ str1 : String
+        ~ str2 : String
+        ~ str3 : int
+        ~ str4 : int
+        ~ tvdate : TextView
+        ~ uidi : String
+        ~ uidi2 : String
+        ~ x : int
+        - calendar : Calendar
+        - date : String
+        - dateFormat : SimpleDateFormat
+        + csve()
+        + onCreateOptionsMenu()
+        + onOptionsItemSelected()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.FBref {
+        {static} + FBDB : FirebaseDatabase
+        {static} + mAuth : FirebaseAuth
+        {static} + refEX : DatabaseReference
+        {static} + refINC : DatabaseReference
+        {static} + refU : DatabaseReference
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.Graphs {
+        ~ cal : Calendar
+        ~ cal2 : Calendar
+        ~ graph2 : GraphView
+        ~ monthlist : ArrayList<Integer>
+        ~ pricelist : ArrayList<Integer>
+        ~ series2 : BarGraphSeries<DataPoint>
+        ~ spin : String[]
+        ~ spinner : Spinner
+        ~ str3 : int
+        ~ str4 : int
+        ~ sum : int
+        ~ sum2 : int
+        ~ sum3 : int
+        ~ sum4 : int
+        ~ sum5 : int
+        ~ sum6 : int
+        ~ uid : String
+        + graphh()
+        + onCreateOptionsMenu()
+        + onOptionsItemSelected()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.Incomes {
+        + incList : ArrayList<String>
+        + incList2 : ArrayList<String>
+        + incList3 : ArrayList<Integer>
+        + incList4 : ArrayList<Integer>
+        ~ DIuid : String
+        ~ Data : StringBuilder
+        ~ Iuid : String
+        ~ Spinner : Spinner
+        ~ adb : Builder
+        ~ cal : Calendar
+        ~ deuid2 : int
+        ~ et1 : EditText
+        ~ et2 : EditText
+        ~ et3 : EditText
+        ~ hour : int
+        ~ mDateSetListener : OnDateSetListener
+        ~ minute : int
+        ~ monthI : int
+        ~ pricei : int
+        ~ second : int
+        ~ spinE : String[]
+        ~ str1 : String
+        ~ str2 : String
+        ~ str3 : int
+        ~ str4 : int
+        ~ tvdate : TextView
+        ~ uidi : String
+        ~ uidi2 : String
+        ~ x : int
+        - calendar : Calendar
+        - date : String
+        - dateFormat : SimpleDateFormat
+        + csvi()
+        + onCreateOptionsMenu()
+        + onOptionsItemSelected()
+        # onCreate()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.IncomesC {
+        - Idate : String
+        - Imonth : int
+        - Iprice : int
+        - Itype : String
+        - Iuid : String
+        + IncomesC()
+        + IncomesC()
+        + getIdate()
+        + getImonth()
+        + getIprice()
+        + getItype()
+        + getIuid()
+        + setIdate()
+        + setImonth()
+        + setIprice()
+        + setItype()
+        + setIuid()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.MainActivity {
+        ~ btn : Button
+        ~ cBstayconnect : CheckBox
+        ~ desc : String
+        ~ eTdesc : EditText
+        ~ eTemail : EditText
+        ~ eTname : EditText
+        ~ eTpass : EditText
+        ~ email : String
+        ~ firstrun : Boolean
+        ~ name : String
+        ~ password : String
+        ~ registered : Boolean
+        ~ stayConnect : Boolean
+        ~ tVregister : TextView
+        ~ tVtitle : TextView
+        ~ uid : String
+        + logorreg()
+        # onCreate()
+        # onPause()
+        # onStart()
+        - logoption()
+        - regoption()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.PersonalArea {
+        + imguri : Uri
+        ~ imageButton : ImageButton
+        ~ mstorageRef : StorageReference
+        ~ s : String
+        ~ tv : TextView
+        + ex()
+        + filechooser()
+        + fileuploader()
+        + inc()
+        + stat()
+        # onActivityResult()
+        # onCreate()
+        - getExtension()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.UserC {
+        - desc : String
+        - mail : String
+        - name : String
+        - pass : String
+        - uid : String
+        + UserC()
+        + UserC()
+        + getdesc()
+        + getmail()
+        + getname()
+        + getpass()
+        + getuid()
+        + setdesc()
+        + setmail()
+        + setname()
+        + setpass()
+        + setuid()
+    }
+  }
+  
+
+  namespace com.example.beta {
+    class com.example.beta.expensesC {
+        - Edate : String
+        - Emonth : int
+        - Eprice : int
+        - Etype : String
+        - Euid : String
+        + expensesC()
+        + expensesC()
+        + getEdate()
+        + getEmonth()
+        + getEprice()
+        + getEtype()
+        + getEuid()
+        + setEdate()
+        + setEmonth()
+        + setEprice()
+        + setEtype()
+        + setEuid()
+    }
+  }
+  
+
+  com.example.beta.Credits -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.beta.Expenses -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.beta.Expenses o-- com.example.beta.expensesC : exp
+  com.example.beta.Graphs -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.beta.Incomes -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.beta.Incomes o-- com.example.beta.IncomesC : inc
+  com.example.beta.IncomesC .up.|> java.io.Serializable
+  com.example.beta.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.beta.MainActivity o-- com.example.beta.UserC : userdb
+  com.example.beta.PersonalArea -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.beta.PersonalArea o-- com.example.beta.UserC : user
+  com.example.beta.expensesC .up.|> java.io.Serializable
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

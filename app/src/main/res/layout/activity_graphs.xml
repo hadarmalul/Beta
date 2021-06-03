@@ -10,7 +10,14 @@
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="60dip" />
+        android:layout_height="40dip" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="180dip"
+        android:layout_alignTop="@+id/addButton"
+        android:layout_marginTop="-387dp" />
 
     <Space
         android:layout_width="match_parent"
@@ -23,9 +30,9 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph2"
         android:layout_width="match_parent"
-        android:layout_height="300dip"
+        android:layout_height="180dip"
         android:layout_alignTop="@+id/addButton"
-        android:layout_marginTop="-325dp" />
+        android:layout_marginTop="-194dp" />
 
     <Button
         android:id="@+id/addButton"

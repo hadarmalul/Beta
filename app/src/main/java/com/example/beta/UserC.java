@@ -1,6 +1,8 @@
 package com.example.beta;
 
-public class UserC {
+import java.io.Serializable;
+
+public class UserC implements Serializable {
 
         private String name, pass, mail, desc, uid;
 
