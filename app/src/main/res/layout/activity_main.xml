@@ -83,16 +83,6 @@
             android:layout_height="0dp"
             android:layout_weight="0.5" />
 
-        <EditText
-            android:id="@+id/eTdesc"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="description"
-            android:inputType="textPersonName|phone"
-            android:visibility="invisible" />
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"

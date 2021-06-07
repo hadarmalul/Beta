@@ -55,7 +55,7 @@ public class Incomes extends AppCompatActivity {
     public ArrayList<Integer> incList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
     String str1, str2;
-    int str3, str4;
+    int str3, str4, year2, month2, day2;
     StringBuilder Data = new StringBuilder();
     Calendar cal = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -86,13 +86,13 @@ public class Incomes extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+                 year2 = cal.get(Calendar.YEAR);
+                 month2 = cal.get(Calendar.MONTH);
+                 day2 = cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         Incomes.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year2, month2, day2);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -105,7 +105,7 @@ public class Incomes extends AppCompatActivity {
                 uidi = dayOfMonth + "/" + month + "/" + year;
                 int currentYear = Calendar.getInstance().get(Calendar.YEAR);
                 tvdate.setText(uidi);
-                DIuid = String.valueOf(year) + String.valueOf(month) + String.valueOf(dayOfMonth) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
+
                 uidi2 = String.valueOf(dayOfMonth) + String.valueOf(month) + String.valueOf(year);
                 monthI = month;
             }
@@ -155,6 +155,8 @@ public class Incomes extends AppCompatActivity {
      * @param view the view
      */
     public void csvi(View view) {
+
+        DIuid = String.valueOf(year2) + String.valueOf(month2) + String.valueOf(day2) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
 
         String sug = et1.getText().toString();
         String price = et3.getText().toString();
@@ -256,6 +258,9 @@ public class Incomes extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
+
+            et1.setText(" ");
+            et3.setText(" ");
         }
 
         /**

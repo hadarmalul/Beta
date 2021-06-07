@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView tVtitle, tVregister;
-    EditText eTname,eTdesc, eTemail, eTpass;
+    EditText eTname, eTemail, eTpass;
     CheckBox cBstayconnect;
     Button btn;
     String name, desc, email, password, uid;
@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         eTname=(EditText)findViewById(R.id.eTname);
         eTemail=(EditText)findViewById(R.id.eTemail);
         eTpass=(EditText)findViewById(R.id.eTpass);
-        eTdesc =(EditText)findViewById(R.id.eTdesc);
         cBstayconnect=(CheckBox)findViewById(R.id.cBstayconnect);
         tVregister=(TextView) findViewById(R.id.tVregister);
         btn=(Button)findViewById(R.id.btn);
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         regoption();
     }
 
-    protected void sendEmail() {
+    /**protected void sendEmail() {
 
         Log.i("Send email", "");
 
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,
                     "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
-    }
+    }**/
 
 
 
@@ -137,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View textView) {
                 tVtitle.setText("Register");
                 eTname.setVisibility(View.VISIBLE);
-                eTdesc.setVisibility(View.VISIBLE);
                 btn.setText("Register");
                 registered=false;
                 logoption();
@@ -160,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View textView) {
                 tVtitle.setText("Login");
                 eTname.setVisibility(View.INVISIBLE);
-                eTdesc.setVisibility(View.INVISIBLE);
                 btn.setText("Login");
                 registered=true;
                 regoption();
@@ -205,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                     });
         } else {
             name=eTname.getText().toString();
-            desc = eTdesc.getText().toString();
             email=eTemail.getText().toString();
             password=eTpass.getText().toString();
 
@@ -221,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                 editor.commit();
                                 Log.d("MainActivity", "createUserWithEmail:success");
-                                sendEmail();
+                                //sendEmail();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 uid = user.getUid();
                                 userdb=new UserC(name, " ",email," ",uid);

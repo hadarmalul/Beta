@@ -50,6 +50,7 @@
         android:layout_weight="18"
         android:ems="10"
         android:hint="Type"
+        android:layout_gravity="left"
         android:inputType="textPersonName" />
 
     <TextView
@@ -68,6 +69,7 @@
         android:layout_weight="18"
         android:ems="10"
         android:hint="Price"
+        android:layout_gravity="left"
         android:inputType="textPersonName" />
 
     <Button
