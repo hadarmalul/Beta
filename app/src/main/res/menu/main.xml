@@ -8,7 +8,7 @@
     <item
         android:title="Incomes" />
     <item
-        android:title="Graphs" />
+        android:title="Statistics" />
     <item
         android:title="Credits" />
 </menu>
