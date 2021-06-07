@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dip"
         android:layout_alignTop="@+id/addButton"
-        android:layout_marginTop="-387dp" />
+        android:layout_marginTop="-540dp" />
 
     <Space
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="180dip"
         android:layout_alignTop="@+id/addButton"
-        android:layout_marginTop="-194dp" />
+        android:layout_marginTop="-317dp" />
 
     <Button
         android:id="@+id/addButton"
