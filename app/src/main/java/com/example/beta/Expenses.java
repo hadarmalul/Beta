@@ -15,12 +15,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +33,6 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
@@ -43,8 +42,8 @@ import static com.example.beta.FBref.refEX;
 
 public class Expenses extends AppCompatActivity {
 
-    EditText et1, et2, et3;
-    int x = 0, pricei, monthE, deuid2;
+    EditText et1, et3;
+    int x = 0, priceE, monthE;
     TextView tvdate;
     String Euid = " ", Deuid = " ",  uidi = " ", uidi2 = " ";
     Spinner Spinner;
@@ -54,7 +53,7 @@ public class Expenses extends AppCompatActivity {
     public ArrayList<Integer> exList3 = new ArrayList<Integer>();
     public ArrayList<Integer> exList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
-    String str1, str2;
+    String str1, str2, sug = " ", price = " ";
     int str3, str4, year2, month2, day2;
     StringBuilder Data = new StringBuilder();
     Calendar cal = Calendar.getInstance();
@@ -156,14 +155,14 @@ public class Expenses extends AppCompatActivity {
      */
     public void csve(View view) {
 
-        Deuid = String.valueOf(year2) + String.valueOf(month2) + String.valueOf(day2) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
+        Deuid = String.valueOf(year2) + String.valueOf(month2+1) + String.valueOf(day2) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
 
-        String sug = et1.getText().toString();
-        String price = et3.getText().toString();
-        pricei = Integer.parseInt(price);
+            sug = et1.getText().toString();
+            price = et3.getText().toString();
+            priceE = Integer.parseInt(price);
 
 
-        exp = new expensesC(sug,uidi, pricei, monthE, Euid);
+        exp = new expensesC(sug,uidi, priceE, monthE, Euid);
         refEX.child(Euid).child(Deuid).setValue(exp);
 
 

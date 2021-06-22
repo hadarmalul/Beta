@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +44,8 @@ import static com.example.beta.FBref.refINC;
 public class Incomes extends AppCompatActivity {
 
 
-    EditText et1, et2, et3;
-    int x = 0, pricei, monthI, deuid2;
+    EditText et1, et3;
+    int x = 0, pricei, monthI;
     TextView tvdate;
     String Iuid = " ", DIuid = " ", uidi = " ", uidi2 = " ";
     Spinner Spinner;
@@ -54,7 +55,7 @@ public class Incomes extends AppCompatActivity {
     public ArrayList<Integer> incList3 = new ArrayList<Integer>();
     public ArrayList<Integer> incList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
-    String str1, str2;
+    String str1, str2, sug = " ", price = " ";
     int str3, str4, year2, month2, day2;
     StringBuilder Data = new StringBuilder();
     Calendar cal = Calendar.getInstance();
@@ -156,12 +157,11 @@ public class Incomes extends AppCompatActivity {
      */
     public void csvi(View view) {
 
-        DIuid = String.valueOf(year2) + String.valueOf(month2) + String.valueOf(day2) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
+        DIuid = String.valueOf(year2) + String.valueOf(month2+1) + String.valueOf(day2) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
 
-        String sug = et1.getText().toString();
-        String price = et3.getText().toString();
-        pricei = Integer.parseInt(price);
-
+            sug = et1.getText().toString();
+            price = et3.getText().toString();
+            pricei = Integer.parseInt(price);
 
         inc = new IncomesC(sug,uidi, pricei, monthI, Iuid);
         refINC.child(Iuid).child(DIuid).setValue(inc);
@@ -270,7 +270,7 @@ public class Incomes extends AppCompatActivity {
 
         adb = new AlertDialog.Builder(this);
         adb.setTitle("upload a table?");
-        adb.setMessage("do you want to upload the table right now?");
+        adb.setMessage("do you want to upload the table right now?  or save for later?");
         adb.setPositiveButton("UPLOAD", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

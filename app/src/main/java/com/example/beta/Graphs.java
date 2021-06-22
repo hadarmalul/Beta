@@ -3,6 +3,7 @@ package com.example.beta;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,11 +41,9 @@ public class Graphs extends AppCompatActivity {
     ArrayList<Integer> monthlist2 = new ArrayList<Integer>();
     ArrayList<Integer> pricelist2 = new ArrayList<Integer>();
     String uid = " ";
-    int str3, str4;
-    int sum, sum2, sum3, sum4, sum5, sum6;
-    Spinner spinner;
-    String[] spin = {"Expenses", "Incomes"};
-    GraphView graph, graph2;
+    int str1, str2, str3, str4;
+    int sum, sum2, sum3, sum4, sum5, sum6, sum7, sum8, sum9, sum10, sum11, sum12;
+    GraphView graph;
     Calendar cal = Calendar.getInstance();
     Calendar cal2 = Calendar.getInstance();
     BarGraphSeries<DataPoint> series, series2;
@@ -57,14 +56,10 @@ public class Graphs extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
 
-        spinner = (Spinner) findViewById(R.id.spinner);
 
-
-        ArrayAdapter<String> adp = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, spin);
-        spinner.setAdapter(adp);
 
         graph = (GraphView) findViewById(R.id.graph);
-        graph2 = (GraphView) findViewById(R.id.graph2);
+
 
         /**
          * שם במשתנים את שמות החודשים בחצי השנה האחרונה
@@ -90,219 +85,174 @@ public class Graphs extends AppCompatActivity {
         staticLabelsFormatter.setHorizontalLabels(new String[]{month0, month1, month2, month3, month4, month5});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
-        StaticLabelsFormatter staticLabelsFormatter2 = new StaticLabelsFormatter(graph2);
-        staticLabelsFormatter2.setHorizontalLabels(new String[]{month0, month1, month2, month3, month4, month5});
-        graph2.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter2);
-
     }
 
     /**
      * Graphh.
-     *קורא מהfirebase בהתאם למה שנבחר ברשימה
+     * קורא מהfirebase בהתאם למה שנבחר ברשימה
+     *
      * @param view the view
      */
     public void graphh(View view) {
 
+        Query query = refEX.child(uid).orderByChild("edate");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
 
-        if (spinner.getSelectedItemPosition() == 0) {
+            @Override
+            public void onDataChange(DataSnapshot dS) {
+                monthlist.clear();
+                pricelist.clear();
 
-            Query query = refEX.child(uid).orderByChild("edate");
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                for (DataSnapshot data : dS.getChildren()) {
+                    expensesC expences = data.getValue(expensesC.class);
 
-                @Override
-                public void onDataChange(DataSnapshot dS) {
-                    monthlist.clear();
-                    pricelist.clear();
-
-                    for (DataSnapshot data : dS.getChildren()) {
-                        expensesC expences = data.getValue(expensesC.class);
-
-                        str3 = expences.getEprice();
-                        str4 = expences.getEmonth();
-                        monthlist.add(str4);
-                        pricelist.add(str3);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-
-            graph.setTitle("Expenses");
-
-            /**
-             * שם במשתנים את מספרי החודשים בחצי שנה האחרונה
-             */
-
-            int month00 = cal2.get(Calendar.MONTH);
-            int month11 = (((month00 - 1) + 12) % 12);
-            int month22 = (((month00 - 2) + 12) % 12);
-            int month33 = (((month00 - 3) + 12) % 12);
-            int month44 = (((month00 - 4) + 12) % 12);
-            int month55 = (((month00 - 5) + 12) % 12);
-
-            if (month11 == 0) {
-                month11 = month11 + 12;
-            }
-            if (month22 == 0) {
-                month22 = month22 + 12;
-            }
-            if (month33 == 0) {
-                month33 = month33 + 12;
-            }
-            if (month44 == 0) {
-                month44 = month44 + 12;
-            }
-            if (month55 == 0) {
-                month55 = month55 + 12;
-            }
-
-            /**
-             * סוכם את סכומי ההוצאות/הכנסות לפי מספרי החודשים בחצי שנה האחרונה
-             */
-
-            for (int i = 0; i < monthlist.size(); i++) {
-                if (monthlist.get(i) == (month00 + 1)) {
-                    sum = sum + pricelist.get(i);
-                }
-                if (monthlist.get(i) == (month11 + 1)) {
-                    sum2 = sum2 + pricelist.get(i);
-                }
-                if (monthlist.get(i) == (month22 + 1)) {
-                    sum3 = sum3 + pricelist.get(i);
-                }
-                if (monthlist.get(i) == (month33 + 1)) {
-                    sum4 = sum4 + pricelist.get(i);
-                }
-                if (monthlist.get(i) == (month44 + 1)) {
-                    sum5 = sum5 + pricelist.get(i);
-                }
-                if (monthlist.get(i) == (month55 + 1)) {
-                    sum6 = sum6 + pricelist.get(i);
+                    str3 = expences.getEprice();
+                    str4 = expences.getEmonth();
+                    monthlist.add(str4);
+                    pricelist.add(str3);
                 }
             }
-            /**
-             * מציג את הנתונים על הגרף
-             */
-            try {
-                series = new BarGraphSeries<>(new DataPoint[]{
 
-                        new DataPoint(0, sum),
-                        new DataPoint(2, sum2),
-                        new DataPoint(4, sum3),
-                        new DataPoint(6, sum4),
-                        new DataPoint(8, sum5),
-                        new DataPoint(10, sum6)
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
-                });
-                graph.addSeries(series);
-                series.setDrawValuesOnTop(true);
-                series.setSpacing(20);
-            } catch (IllegalArgumentException e) {
-                Toast.makeText(Graphs.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        Query query2 = refINC.child(uid).orderByChild("idate");
+        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dS) {
+                monthlist2.clear();
+                pricelist2.clear();
+
+                for (DataSnapshot data : dS.getChildren()) {
+                    IncomesC incomes = data.getValue(IncomesC.class);
+
+                    str1 = incomes.getIprice();
+                    str2 = incomes.getImonth();
+                    monthlist2.add(str2);
+                    pricelist2.add(str1);
+                }
             }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        /**
+         * שם במשתנים את מספרי החודשים בחצי שנה האחרונה
+         */
+
+        int month00 = cal2.get(Calendar.MONTH);
+        int month11 = (((month00 - 1) + 12) % 12);
+        int month22 = (((month00 - 2) + 12) % 12);
+        int month33 = (((month00 - 3) + 12) % 12);
+        int month44 = (((month00 - 4) + 12) % 12);
+        int month55 = (((month00 - 5) + 12) % 12);
+
+        if (month11 == 0) {
+            month11 = month11 + 12;
         }
-        if (spinner.getSelectedItemPosition() == 1) {
+        if (month22 == 0) {
+            month22 = month22 + 12;
+        }
+        if (month33 == 0) {
+            month33 = month33 + 12;
+        }
+        if (month44 == 0) {
+            month44 = month44 + 12;
+        }
+        if (month55 == 0) {
+            month55 = month55 + 12;
+        }
 
-            Query query = refINC.child(uid).orderByChild("idate");
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
+        /**
+         * סוכם את סכומי ההוצאות/הכנסות לפי מספרי החודשים בחצי שנה האחרונה
+         */
 
-                @Override
-                public void onDataChange(DataSnapshot dS) {
-                    monthlist.clear();
-                    pricelist.clear();
-
-                    for (DataSnapshot data : dS.getChildren()) {
-                        IncomesC inc2 = data.getValue(IncomesC.class);
-
-                        str3 = inc2.getIprice();
-                        str4 = inc2.getImonth();
-                        monthlist2.add(str4);
-                        pricelist2.add(str3);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-
-            graph2.setTitle("Incomes");
-            /**
-             * שם במשתנים את מספרי החודשים בחצי שנה האחרונה
-             */
-
-            int month00 = cal2.get(Calendar.MONTH);
-            int month11 = (((month00 - 1) + 12) % 12);
-            int month22 = (((month00 - 2) + 12) % 12);
-            int month33 = (((month00 - 3) + 12) % 12);
-            int month44 = (((month00 - 4) + 12) % 12);
-            int month55 = (((month00 - 5) + 12) % 12);
-
-            if (month11 == 0) {
-                month11 = month11 + 12;
+        for (int i = 0; i < monthlist.size(); i++) {
+            if (monthlist.get(i) == (month00 + 1)) {
+                sum = sum + pricelist.get(i);
             }
-            if (month22 == 0) {
-                month22 = month22 + 12;
+            if (monthlist.get(i) == (month11 + 1)) {
+                sum2 = sum2 + pricelist.get(i);
             }
-            if (month33 == 0) {
-                month33 = month33 + 12;
+            if (monthlist.get(i) == (month22 + 1)) {
+                sum3 = sum3 + pricelist.get(i);
             }
-            if (month44 == 0) {
-                month44 = month44 + 12;
+            if (monthlist.get(i) == (month33 + 1)) {
+                sum4 = sum4 + pricelist.get(i);
             }
-            if (month55 == 0) {
-                month55 = month55 + 12;
+            if (monthlist.get(i) == (month44 + 1)) {
+                sum5 = sum5 + pricelist.get(i);
             }
-
-            /**
-             * סוכם את סכומי ההוצאות/הכנסות לפי מספרי החודשים בחצי שנה האחרונה
-             */
-
-            for (int i = 0; i < monthlist2.size(); i++) {
-                if (monthlist2.get(i) == (month00 + 1)) {
-                    sum = sum + pricelist2.get(i);
-                }
-                if (monthlist2.get(i) == (month11 + 1)) {
-                    sum2 = sum2 + pricelist2.get(i);
-                }
-                if (monthlist2.get(i) == (month22 + 1)) {
-                    sum3 = sum3 + pricelist2.get(i);
-                }
-                if (monthlist2.get(i) == (month33 + 1)) {
-                    sum4 = sum4 + pricelist2.get(i);
-                }
-                if (monthlist2.get(i) == (month44 + 1)) {
-                    sum5 = sum5 + pricelist2.get(i);
-                }
-                if (monthlist2.get(i) == (month55 + 1)) {
-                    sum6 = sum6 + pricelist2.get(i);
-                }
-            }
-            /**
-             * מציג את הנתונים על הגרף
-             */
-            try {
-                series2 = new BarGraphSeries<>(new DataPoint[]{
-
-                        new DataPoint(0, sum),
-                        new DataPoint(2, sum2),
-                        new DataPoint(4, sum3),
-                        new DataPoint(6, sum4),
-                        new DataPoint(8, sum5),
-                        new DataPoint(10, sum6)
-
-                });
-                graph2.addSeries(series2);
-                series2.setDrawValuesOnTop(true);
-                series2.setSpacing(20);
-            } catch (IllegalArgumentException e) {
-                Toast.makeText(Graphs.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            if (monthlist.get(i) == (month55 + 1)) {
+                sum6 = sum6 + pricelist.get(i);
             }
         }
+
+
+        /**
+         * סוכם את סכומי ההוצאות/הכנסות לפי מספרי החודשים בחצי שנה האחרונה
+         */
+
+        for (int j = 0; j < monthlist2.size(); j++) {
+            if (monthlist2.get(j) == (month00 + 1)) {
+                sum7 = sum7 + pricelist2.get(j);
+            }
+            if (monthlist2.get(j) == (month11 + 1)) {
+                sum8 = sum8 + pricelist2.get(j);
+            }
+            if (monthlist2.get(j) == (month22 + 1)) {
+                sum9 = sum9 + pricelist2.get(j);
+            }
+            if (monthlist2.get(j) == (month33 + 1)) {
+                sum10 = sum10 + pricelist2.get(j);
+            }
+            if (monthlist2.get(j) == (month44 + 1)) {
+                sum11 = sum11 + pricelist2.get(j);
+            }
+            if (monthlist2.get(j) == (month55 + 1)) {
+                sum12 = sum12 + pricelist2.get(j);
+            }
+        }
+        /**
+         * מציג את הנתונים על הגרף
+         */
+
+        int color = Color.RED;
+        int color2 = Color.GREEN;
+        series = new BarGraphSeries<>(new DataPoint[]{
+
+                new DataPoint(0, sum),
+                new DataPoint(2, sum2),
+                new DataPoint(4, sum3),
+                new DataPoint(6, sum4),
+                new DataPoint(8, sum5),
+                new DataPoint(10, sum6)
+
+        });
+
+        series.setColor(color);
+        graph.addSeries(series);
+
+        series2 = new BarGraphSeries<>(new DataPoint[]{
+
+                new DataPoint(0, sum7),
+                new DataPoint(2, sum8),
+                new DataPoint(4, sum9),
+                new DataPoint(6, sum10),
+                new DataPoint(8, sum11),
+                new DataPoint(10, sum12)
+
+        });
+
+        series2.setColor(color2);
+        graph.addSeries(series2);
     }
+
 
 
     /**

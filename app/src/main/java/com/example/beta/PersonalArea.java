@@ -46,8 +46,7 @@ public class PersonalArea extends AppCompatActivity {
     TextView tv;
     StorageReference mstorageRef;
     public Uri imguri;
-    UserC user;
-    String s, photo, name, uid;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

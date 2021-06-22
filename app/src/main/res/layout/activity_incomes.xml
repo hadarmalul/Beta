@@ -79,7 +79,7 @@
         android:layout_gravity="center"
         android:layout_weight="8"
         android:onClick="csvi"
-        android:text="add expense" />
+        android:text="add income" />
 
     <Space
         android:layout_width="0dp"

@@ -31,7 +31,6 @@ import static com.example.beta.FBref.mAuth;
 import static com.example.beta.FBref.refEX;
 import static com.example.beta.FBref.refU;
 
-// סטורג אימייל שם מהפיירבייס גרף
 
 /**
  * The type Main activity.
@@ -44,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
     EditText eTname, eTemail, eTpass;
     CheckBox cBstayconnect;
     Button btn;
-    String name, desc, email, password, uid;
+    String name = " ", email = " ", password = " ", uid;
     UserC userdb;
-    Boolean stayConnect, registered, firstrun;
+    Boolean stayConnect, registered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,35 +63,9 @@ public class MainActivity extends AppCompatActivity {
         stayConnect=false;
         registered=true;
 
-        FirebaseUser user = mAuth.getCurrentUser();
-        uid = user.getUid();
 
         regoption();
     }
-
-    /**protected void sendEmail() {
-
-        Log.i("Send email", "");
-
-        String[] TO = {userdb.getmail()};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-
-
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Send Email");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Welcome, "+userdb.getname());
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            finish();
-            Log.i("Finished sending email.", "");
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(MainActivity.this,
-                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
-        }
-    }**/
 
 
 
@@ -175,8 +148,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void logorreg(View view) {
         if (registered) {
-            email=eTemail.getText().toString();
-            password=eTpass.getText().toString();
+
+            email = eTemail.getText().toString();
+            password = eTpass.getText().toString();
 
             final ProgressDialog pd=ProgressDialog.show(this,"Login","Connecting...",true);
             mAuth.signInWithEmailAndPassword(email, password)
@@ -201,9 +175,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         } else {
+
             name=eTname.getText().toString();
-            email=eTemail.getText().toString();
-            password=eTpass.getText().toString();
+            email = eTemail.getText().toString();
+            password = eTpass.getText().toString();
+
 
             final ProgressDialog pd=ProgressDialog.show(this,"Register","Registering...",true);
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -217,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putBoolean("stayConnect",cBstayconnect.isChecked());
                                 editor.commit();
                                 Log.d("MainActivity", "createUserWithEmail:success");
-                                //sendEmail();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 uid = user.getUid();
                                 userdb=new UserC(name, " ",email," ",uid);
