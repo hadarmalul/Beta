@@ -55,7 +55,7 @@ public class Incomes extends AppCompatActivity {
     public ArrayList<Integer> incList3 = new ArrayList<Integer>();
     public ArrayList<Integer> incList4 = new ArrayList<Integer>();
     String[] spinE = {"Date", "type", "price"};
-    String str1, str2, sug = " ", price = " ";
+    String str1, str2, sug = null, price = null;
     int str3, str4, year2, month2, day2;
     StringBuilder Data = new StringBuilder();
     Calendar cal = Calendar.getInstance();
@@ -159,167 +159,172 @@ public class Incomes extends AppCompatActivity {
 
         DIuid = String.valueOf(year2) + String.valueOf(month2+1) + String.valueOf(day2) + String.valueOf(hour) + String.valueOf(minute) + String.valueOf(second);
 
-            sug = et1.getText().toString();
-            price = et3.getText().toString();
-            pricei = Integer.parseInt(price);
+        sug = et1.getText().toString();
+        price = et3.getText().toString();
+        pricei = Integer.parseInt(price);
 
-        inc = new IncomesC(sug,uidi, pricei, monthI, Iuid);
-        refINC.child(Iuid).child(DIuid).setValue(inc);
+        if ((sug.isEmpty())&&(price.isEmpty())){
+            Toast.makeText(Incomes.this, "Please enter an Income", Toast.LENGTH_SHORT).show();
+        }else {
+
+            inc = new IncomesC(sug, uidi, pricei, monthI, Iuid);
+            refINC.child(Iuid).child(DIuid).setValue(inc);
 
 
-        if (Spinner.getSelectedItemPosition() == 0) {
-            Query query = refINC.child(Iuid).orderByChild(DIuid);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
+            if (Spinner.getSelectedItemPosition() == 0) {
+                Query query = refINC.child(Iuid).orderByChild(DIuid);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                @Override
-                public void onDataChange(DataSnapshot dS) {
-                    incList.clear();
-                    incList2.clear();
-                    incList3.clear();
-                    incList4.clear();
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+                        incList4.clear();
 
-                    for (DataSnapshot data : dS.getChildren()) {
-                        IncomesC inc2 = data.getValue(IncomesC.class);
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
 
-                        str1 = inc2.getItype();
-                        str2 = inc2.getIdate();
-                        str3 = inc2.getIprice();
-                        str4 = inc2.getImonth();
-                        incList.add(str1 + "");
-                        incList2.add(str2+ "");
-                        incList3.add(str3);
-                        incList4.add(str4);
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            str4 = inc2.getImonth();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3);
+                            incList4.add(str4);
+                        }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-
-        if (Spinner.getSelectedItemPosition() == 1) {
-            Query query = refINC.child(Iuid).orderByChild("itype");
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dS) {
-                    incList.clear();
-                    incList2.clear();
-                    incList3.clear();
-                    incList4.clear();
-
-                    for (DataSnapshot data : dS.getChildren()) {
-                        IncomesC inc2 = data.getValue(IncomesC.class);
-
-                        str1 = inc2.getItype();
-                        str2 = inc2.getIdate();
-                        str3 = inc2.getIprice();
-                        str4 = inc2.getImonth();
-                        incList.add(str1 + "");
-                        incList2.add(str2+ "");
-                        incList3.add(str3);
-                        incList4.add(str4);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
                     }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-
-        if (Spinner.getSelectedItemPosition() == 2) {
-            Query query = refINC.child(Iuid).orderByChild("iprice");
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dS) {
-                    incList.clear();
-                    incList2.clear();
-                    incList3.clear();
-                    incList4.clear();
-
-                    for (DataSnapshot data : dS.getChildren()) {
-                        IncomesC inc2 = data.getValue(IncomesC.class);
-
-                        str1 = inc2.getItype();
-                        str2 = inc2.getIdate();
-                        str3 = inc2.getIprice();
-                        str4 = inc2.getImonth();
-                        incList.add(str1 + "");
-                        incList2.add(str2+ "");
-                        incList3.add(str3);
-                        incList4.add(str4);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-
-            et1.setText(" ");
-            et3.setText(" ");
-        }
-
-        /**
-         * תיבת דו שיח שכאשר המשתמש לוחץ כל לא עכשיו לא קורה כלום
-         * כאשר המשתמש לוחץ על העלאה נוצרת טבלת csv והיא נשלחת אליו
-         */
-
-        adb = new AlertDialog.Builder(this);
-        adb.setTitle("upload a table?");
-        adb.setMessage("do you want to upload the table right now?  or save for later?");
-        adb.setPositiveButton("UPLOAD", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                Data.setLength(0);
-                Data.append("סכום ,תאריך, ");
-                for (int k = 0; k < incList.size(); k++) {
-                    Data.append("\n" + incList3.get(k) + "," + incList2.get(k) + "," + incList.get(k));
-                }
-
-
-                try {
-                    String name ="data";
-                    calendar = Calendar.getInstance();
-                    dateFormat = new SimpleDateFormat("yyMMddHHmmss");
-                    date = dateFormat.format(calendar.getTime());
-                    name += date;
-                    name += ".csv";
-                    FileOutputStream out = openFileOutput((name), Context.MODE_PRIVATE);
-                    out.write((Data.toString()).getBytes());
-                    out.close();
-
-                    Context context = getApplicationContext();
-                    File filelocation = new File(getFilesDir(), name);
-                    Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
-                    Intent fileIntent = new Intent(Intent.ACTION_SEND);
-                    fileIntent.setType("text/csv");
-                    fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
-                    fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    fileIntent.putExtra(Intent.EXTRA_STREAM, path);
-                    startActivity(Intent.createChooser(fileIntent, "send mail"));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                }
+                });
             }
-        });
 
-        adb.setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            if (Spinner.getSelectedItemPosition() == 1) {
+                Query query = refINC.child(Iuid).orderByChild("itype");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                dialogInterface.cancel();
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+                        incList4.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            str4 = inc2.getImonth();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3);
+                            incList4.add(str4);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
             }
-        });
 
-        AlertDialog ad = adb.create();
-        ad.show();
+            if (Spinner.getSelectedItemPosition() == 2) {
+                Query query = refINC.child(Iuid).orderByChild("iprice");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dS) {
+                        incList.clear();
+                        incList2.clear();
+                        incList3.clear();
+                        incList4.clear();
+
+                        for (DataSnapshot data : dS.getChildren()) {
+                            IncomesC inc2 = data.getValue(IncomesC.class);
+
+                            str1 = inc2.getItype();
+                            str2 = inc2.getIdate();
+                            str3 = inc2.getIprice();
+                            str4 = inc2.getImonth();
+                            incList.add(str1 + "");
+                            incList2.add(str2 + "");
+                            incList3.add(str3);
+                            incList4.add(str4);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+                et1.setText(" ");
+                et3.setText(" ");
+            }
+
+            /**
+             * תיבת דו שיח שכאשר המשתמש לוחץ כל לא עכשיו לא קורה כלום
+             * כאשר המשתמש לוחץ על העלאה נוצרת טבלת csv והיא נשלחת אליו
+             */
+
+            adb = new AlertDialog.Builder(this);
+            adb.setTitle("upload a table?");
+            adb.setMessage("do you want to upload the table right now?  or save for later?");
+            adb.setPositiveButton("UPLOAD", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    Data.setLength(0);
+                    Data.append("סכום ,תאריך, ");
+                    for (int k = 0; k < incList.size(); k++) {
+                        Data.append("\n" + incList3.get(k) + "," + incList2.get(k) + "," + incList.get(k));
+                    }
+
+
+                    try {
+                        String name = "data";
+                        calendar = Calendar.getInstance();
+                        dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+                        date = dateFormat.format(calendar.getTime());
+                        name += date;
+                        name += ".csv";
+                        FileOutputStream out = openFileOutput((name), Context.MODE_PRIVATE);
+                        out.write((Data.toString()).getBytes());
+                        out.close();
+
+                        Context context = getApplicationContext();
+                        File filelocation = new File(getFilesDir(), name);
+                        Uri path = FileProvider.getUriForFile(context, "com.example.Beta.fileprovider", filelocation);
+                        Intent fileIntent = new Intent(Intent.ACTION_SEND);
+                        fileIntent.setType("text/csv");
+                        fileIntent.putExtra(Intent.EXTRA_SUBJECT, name);
+                        fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+                        startActivity(Intent.createChooser(fileIntent, "send mail"));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            });
+
+            adb.setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    dialogInterface.cancel();
+                }
+            });
+
+            AlertDialog ad = adb.create();
+            ad.show();
+        }
     }
 
     /**

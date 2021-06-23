@@ -66,11 +66,11 @@
         android:id="@+id/et3"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_gravity="left"
         android:layout_weight="18"
         android:ems="10"
         android:hint="Price"
-        android:layout_gravity="left"
-        android:inputType="textPersonName" />
+        android:inputType="number" />
 
     <Button
         android:id="@+id/button"
